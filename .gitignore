@@ -23,6 +23,7 @@ Thumbs.db
 # Local reference files (not needed on GitHub)
 docs/
 supabase/
+render-env-vars.txt
 
 # Generated bundle (rebuild via `node bundle.mjs`)
 old/assets/dist/
