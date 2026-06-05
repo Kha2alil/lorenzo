@@ -1,0 +1,2 @@
+-- SUPERSEDED by 003_product_colors.sql.
+-- Use 003_product_colors.sql instead which creates a separate product_colors table.

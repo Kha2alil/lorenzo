@@ -1,0 +1,67 @@
+.slider-section { padding-left: 0; padding-right: 0; overflow: visible; }
+.slider-header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    padding: 0 20px; margin-bottom: 20px;
+}
+.slider-view-all {
+    font-size: 9px; font-weight: 400; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--warm-gray);
+    display: flex; align-items: center; gap: 6px; cursor: pointer;
+    transition: color 0.2s;
+}
+.slider-view-all:hover { color: var(--charcoal); }
+.slider-view-all svg { width: 12px; height: 12px; }
+
+.slider-track-wrap {
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; padding: 0 20px 4px;
+    scroll-snap-type: x mandatory;
+    cursor: grab;
+}
+.slider-track-wrap::-webkit-scrollbar { display: none; }
+.slider-track-wrap.grabbing { cursor: grabbing; }
+.slider-track {
+    display: flex; gap: 12px; width: max-content;
+}
+.slider-track .product-card {
+    width: 180px; flex-shrink: 0;
+    scroll-snap-align: start;
+}
+.slider-track .product-card .product-img-wrap { aspect-ratio: 3/4; }
+
+.slider-btn {
+    display: none;
+    position: absolute; top: 50%; transform: translateY(-50%);
+    z-index: 5; width: 36px; height: 36px;
+    background: rgba(255,255,255,0.95);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    align-items: center; justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: background 0.2s, box-shadow 0.2s;
+}
+.slider-btn:active { background: var(--ivory-deep); box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+.slider-btn svg { width: 16px; height: 16px; stroke: var(--charcoal); }
+.slider-prev { left: 4px; }
+.slider-next { right: 4px; }
+.slider-section { position: relative; }
+
+@media (max-width: 767px) {
+    .slider-btn { display: flex; }
+}
+
+.slider-dots {
+    display: flex; justify-content: center; gap: 6px;
+    padding: 14px 0 0;
+}
+.slider-dot-item {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--ivory-dark); cursor: pointer;
+    transition: background 0.25s, transform 0.25s;
+    border: none; padding: 0;
+}
+.slider-dot-item.active {
+    background: var(--gold);
+    transform: scale(1.3);
+}

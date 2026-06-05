@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LORENZO — Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=Jost:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .hidden { display: none !important; }
+    .full-width { width: 100%; }
+    .auth-back-link { font-size:11px;color:#8A8478;text-decoration:none;display:inline-block;margin-bottom:24px; }
+    .auth-back-link:hover { color:#1A1A18; }
+    .reset-token-box { background:#EDE7D9;border:1px solid rgba(26,26,24,0.12);padding:16px;font-size:12px;word-break:break-all;margin-bottom:16px; }
+    .reset-token-box code { font-size:11px;color:#1A1A18; }
+  </style>
+</head>
+<body>
+  <div id="app">
+
+    <!-- ═══ Login ═══ -->
+    <div id="login-screen" class="screen">
+      <div class="login-card">
+        <svg class="login-logo" viewBox="0 0 120 28" fill="none" aria-label="LORENZO">
+          <text x="0" y="22" font-family="'Cormorant Garamond', Georgia, serif" font-size="22" font-weight="500" fill="currentColor">LOR</text>
+          <text x="42" y="22" font-family="'Cormorant Garamond', Georgia, serif" font-size="22" font-style="italic" font-weight="400" fill="#C9A84C">enzo</text>
+        </svg>
+        <p class="login-subtitle">Admin Sign In</p>
+        <form id="login-form">
+          <div class="field">
+            <label for="login-email">Email</label>
+            <input type="email" id="login-email" placeholder="admin@lorenzo.dz" required>
+          </div>
+          <div class="field">
+            <label for="login-pwd">Password</label>
+            <input type="password" id="login-pwd" placeholder="Enter your password" required>
+          </div>
+          <p id="login-error" class="form-error"></p>
+          <button type="submit" class="btn btn-primary full-width">Sign In</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- ═══ Forgot Password ═══ -->
+    <div id="forgot-screen" class="screen hidden">
+      <div class="login-card">
+        <a href="#" class="auth-back-link" id="forgot-back">← Back to Sign In</a>
+        <p class="login-subtitle">Reset Password</p>
+        <form id="forgot-form">
+          <div class="field">
+            <label for="forgot-email">Email</label>
+            <input type="email" id="forgot-email" placeholder="admin@lorenzo.dz" required>
+          </div>
+          <p id="forgot-error" class="form-error"></p>
+          <p id="forgot-success" class="form-error" style="color:#2E7D32"></p>
+          <div id="forgot-token-box" class="reset-token-box hidden">
+            <p style="font-size:10px;color:#8A8478;margin-bottom:8px">Copy this reset token (valid for 15 min):</p>
+            <code id="forgot-token-value"></code>
+          </div>
+          <button type="submit" class="btn btn-primary full-width">Send Reset Link</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- ═══ Reset Password ═══ -->
+    <div id="reset-screen" class="screen hidden">
+      <div class="login-card">
+        <a href="#" class="auth-back-link" id="reset-back">← Back to Sign In</a>
+        <p class="login-subtitle">Set New Password</p>
+        <form id="reset-form">
+          <div class="field">
+            <label for="reset-email">Email</label>
+            <input type="email" id="reset-email" required>
+          </div>
+          <div class="field">
+            <label for="reset-token">Reset Token</label>
+            <input type="text" id="reset-token" placeholder="Paste the reset token" required>
+          </div>
+          <div class="field">
+            <label for="reset-pwd">New Password</label>
+            <input type="password" id="reset-pwd" placeholder="Min 6 characters" required minlength="6">
+          </div>
+          <p id="reset-error" class="form-error"></p>
+          <p id="reset-success" class="form-error" style="color:#2E7D32"></p>
+          <button type="submit" class="btn btn-primary full-width">Reset Password</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- ═══ Dashboard ═══ -->
+    <div id="dashboard-screen" class="screen hidden">
+      <aside id="sidebar">
+        <div class="sidebar-header">
+          <svg viewBox="0 0 120 28" fill="none" aria-label="LORENZO" class="sidebar-logo">
+            <text x="0" y="22" font-family="'Cormorant Garamond', Georgia, serif" font-size="22" font-weight="500" fill="currentColor">LOR</text>
+            <text x="42" y="22" font-family="'Cormorant Garamond', Georgia, serif" font-size="22" font-style="italic" font-weight="400" fill="#C9A84C">enzo</text>
+          </svg>
+          <span class="sidebar-label">Admin</span>
+        </div>
+        <nav class="sidebar-nav">
+          <a class="nav-item active" data-page="overview" href="#">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            Overview
+          </a>
+          <a class="nav-item" data-page="products" href="#">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.29 7 12 12 20.71 7"/><line x1="12" y1="22" x2="12" y2="12"/></svg>
+            Products
+          </a>
+          <a class="nav-item" data-page="orders" href="#">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            Orders
+          </a>
+          <a class="nav-item" data-page="top-products" href="#">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            Top Products
+          </a>
+          <a class="nav-item" data-page="contact" href="#">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Contact
+          </a>
+          <a class="nav-item" data-page="audit" href="#">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+            Activity
+          </a>
+          <a class="nav-item" data-page="categories" href="#">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"/></svg>
+            Categories
+          </a>
+          <a class="nav-item" data-page="badges" href="#">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            Badges
+          </a>
+          <a class="nav-item" data-page="settings" href="#">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Profile
+          </a>
+        </nav>
+        <div class="sidebar-footer">
+          <a href="#" id="logout-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            Sign Out
+          </a>
+          <a href="#" id="theme-toggle-btn" onclick="toggleAdminTheme()" style="margin-top:12px;display:flex;align-items:center;gap:10px;font-size:12px;color:#8A8478;text-decoration:none">
+            <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            <svg class="moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            <span id="theme-toggle-label">Dark Mode</span>
+          </a>
+        </div>
+      </aside>
+
+      <main id="main-content">
+        <section class="page active" id="page-overview">
+          <div class="page-header"><h2>Overview</h2></div>
+
+          <!-- Row 1: General Stats -->
+          <div class="stats-grid">
+            <div class="stat-card"><span class="stat-number" id="stat-products">—</span><span class="stat-label">📦 Products</span></div>
+            <div class="stat-card"><span class="stat-number" id="stat-active">—</span><span class="stat-label">✅ Active</span></div>
+            <div class="stat-card"><span class="stat-number" id="stat-orders">—</span><span class="stat-label">📋 Total Orders</span></div>
+            <div class="stat-card"><span class="stat-number" id="stat-pending">—</span><span class="stat-label">⏳ Pending</span></div>
+            <div class="stat-card"><span class="stat-number" id="stat-contacts">—</span><span class="stat-label">✉️ Messages</span></div>
+          </div>
+
+          <!-- Row 2: Products Sold -->
+          <h3 style="margin-top:28px;margin-bottom:12px;font-size:13px;font-weight:500;color:var(--warm-gray);text-transform:uppercase;letter-spacing:0.5px">Products Sold</h3>
+          <div class="stats-grid">
+            <div class="stat-card"><span class="stat-number" id="stat-sold-today">—</span><span class="stat-label">Today</span></div>
+            <div class="stat-card"><span class="stat-number" id="stat-sold-week">—</span><span class="stat-label">This Week</span></div>
+            <div class="stat-card"><span class="stat-number" id="stat-sold-month">—</span><span class="stat-label">This Month</span></div>
+            <div class="stat-card"><span class="stat-number" id="stat-sold-all">—</span><span class="stat-label">All Time</span></div>
+            <div class="stat-card"><span class="stat-number" id="stat-avg-order">—</span><span class="stat-label">Avg Order</span></div>
+          </div>
+
+          <!-- Row 3: Revenue -->
+          <h3 style="margin-top:28px;margin-bottom:12px;font-size:13px;font-weight:500;color:var(--warm-gray);text-transform:uppercase;letter-spacing:0.5px">Revenue</h3>
+          <div class="stats-grid">
+            <div class="stat-card"><span class="stat-number" id="stat-revenue-today">—</span><span class="stat-label">Today</span></div>
+            <div class="stat-card"><span class="stat-number" id="stat-revenue-week">—</span><span class="stat-label">This Week</span></div>
+            <div class="stat-card"><span class="stat-number" id="stat-revenue-month">—</span><span class="stat-label">This Month</span></div>
+            <div class="stat-card"><span class="stat-number" id="stat-revenue-all">—</span><span class="stat-label">All Time</span></div>
+          </div>
+
+          <!-- Row 4: Two columns - Status breakdown + Top products -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:28px">
+            <!-- Status breakdown -->
+            <div class="overview-card">
+              <h3 class="overview-card-title">Orders by Status</h3>
+              <div id="status-breakdown"></div>
+            </div>
+            <!-- Top products -->
+            <div class="overview-card">
+              <h3 class="overview-card-title">Top Selling Products</h3>
+              <div id="top-products-list"></div>
+            </div>
+          </div>
+
+          <!-- Row 5: Orders by category -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:24px">
+            <div class="overview-card">
+              <h3 class="overview-card-title">Products by Category</h3>
+              <div id="category-breakdown"></div>
+            </div>
+            <div class="overview-card">
+              <h3 class="overview-card-title">Sales Overview</h3>
+              <div id="sales-overview-chart"></div>
+            </div>
+          </div>
+
+          <!-- Recent Orders -->
+          <div class="overview-orders">
+            <div class="page-header" style="margin-top:32px"><h3>Recent Orders</h3></div>
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead><tr><th>Order #</th><th>Customer</th><th>Total</th><th>Status</th><th>Date</th><th></th></tr></thead>
+                <tbody id="overview-orders-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section class="page" id="page-products">
+          <div class="page-header"><h2>Products</h2>
+            <button type="button" class="btn btn-primary" id="add-product-btn">+ Add Product</button>
+          </div>
+          <div class="table-wrap" id="products-table-wrap">
+            <input type="text" id="products-search" placeholder="Search products by name..." oninput="filterProducts()">
+            <table class="data-table">
+              <thead><tr><th>Name</th><th>Category</th><th>Price</th><th>Badge</th><th>Status</th><th colspan="2"></th></tr></thead>
+              <tbody id="products-tbody"></tbody>
+            </table>
+          </div> 
+
+          <div class="form-overlay hidden" id="product-form-container">
+            <div class="form-card wide-form" style="max-height:90vh;overflow-y:auto">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+                <h3 id="product-form-title">Add Product</h3>
+                <button type="button" class="btn-icon" id="product-form-cancel" title="Close"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+              </div>
+              <form id="product-form">
+                <input type="hidden" id="pf-id">
+                <div class="form-row">
+                  <div class="field"><label>Name *</label><input type="text" id="pf-name" required></div>
+                  <div class="field"><label>Slug *</label><input type="text" id="pf-slug" required></div>
+                </div>
+                <div class="form-row">
+                  <div class="field"><label>Category *</label>
+                    <select id="pf-category" required></select>
+                  </div>
+                  <div class="field"><label>Price (DZD) *</label><input type="number" id="pf-price" min="1" required></div>
+                </div>
+                <div class="form-row">
+                  <div class="field"><label>Fabric</label><input type="text" id="pf-fabric"></div>
+                  <div class="field"><label>Badge</label>
+                    <select id="pf-badge">
+                      <option value="">None</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="field"><label>Sizes (comma separated)</label><input type="text" id="pf-sizes" placeholder="e.g. S, M, L, XL"></div>
+                <div class="field"><label>Description</label><textarea id="pf-description" rows="3"></textarea></div>
+                <div class="field">
+                  <label>Images (max 5)</label>
+                  <div class="image-upload-grid" id="imageUploadGrid">
+                    <div class="image-upload-cell">
+                      <div class="image-upload-slot" data-index="0">
+                        <input type="file" accept="image/*" class="pf-image-input" data-index="0">
+                        <div class="image-upload-placeholder">
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                          <span>Image 1</span>
+                        </div>
+                        <div class="image-upload-preview"></div>
+                        <button type="button" class="image-upload-remove" title="Remove image">&times;</button>
+                      </div>
+                      <select class="image-color-select"><option value="">Any color</option></select>
+                    </div>
+                    <div class="image-upload-cell">
+                      <div class="image-upload-slot" data-index="1">
+                        <input type="file" accept="image/*" class="pf-image-input" data-index="1">
+                        <div class="image-upload-placeholder">
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                          <span>Image 2</span>
+                        </div>
+                        <div class="image-upload-preview"></div>
+                        <button type="button" class="image-upload-remove" title="Remove image">&times;</button>
+                      </div>
+                      <select class="image-color-select"><option value="">Any color</option></select>
+                    </div>
+                    <div class="image-upload-cell">
+                      <div class="image-upload-slot" data-index="2">
+                        <input type="file" accept="image/*" class="pf-image-input" data-index="2">
+                        <div class="image-upload-placeholder">
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                          <span>Image 3</span>
+                        </div>
+                        <div class="image-upload-preview"></div>
+                        <button type="button" class="image-upload-remove" title="Remove image">&times;</button>
+                      </div>
+                      <select class="image-color-select"><option value="">Any color</option></select>
+                    </div>
+                    <div class="image-upload-cell">
+                      <div class="image-upload-slot" data-index="3">
+                        <input type="file" accept="image/*" class="pf-image-input" data-index="3">
+                        <div class="image-upload-placeholder">
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                          <span>Image 4</span>
+                        </div>
+                        <div class="image-upload-preview"></div>
+                        <button type="button" class="image-upload-remove" title="Remove image">&times;</button>
+                      </div>
+                      <select class="image-color-select"><option value="">Any color</option></select>
+                    </div>
+                    <div class="image-upload-cell">
+                      <div class="image-upload-slot" data-index="4">
+                        <input type="file" accept="image/*" class="pf-image-input" data-index="4">
+                        <div class="image-upload-placeholder">
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                          <span>Image 5</span>
+                        </div>
+                        <div class="image-upload-preview"></div>
+                        <button type="button" class="image-upload-remove" title="Remove image">&times;</button>
+                      </div>
+                      <select class="image-color-select"><option value="">Any color</option></select>
+                    </div>
+                  </div>
+                  <span style="font-size:10px;color:#8A8478;display:block;margin-top:6px">First image = primary. Assign each image to a color so customers see the right image for each color.</span>
+                </div>
+                <div class="field" id="size-availability-field" style="display:none">
+                  <label>Availability</label>
+                  <div class="size-toggles" id="sizeToggles"></div>
+                  <span style="font-size:10px;color:#8A8478">Click a size to toggle as unavailable (out of stock)</span>
+                </div>
+                <div class="field">
+                  <label>Colors</label>
+                  <div class="color-palette" id="colorPalette">
+                    <div class="color-palette-row" style="display:none" data-template>
+                      <input type="text" class="cp-name" placeholder="Color name">
+                      <input type="color" class="cp-hex" value="#1A1A18">
+                      <button type="button" class="cp-remove" title="Remove color">&times;</button>
+                    </div>
+                  </div>
+                  <button type="button" class="btn btn-ghost btn-sm" id="addColorBtn" style="margin-top:8px">+ Add Color</button>
+                </div>
+                <div class="field">
+                  <label>Promotion</label>
+                  <div class="promo-fields">
+                    <div class="form-row">
+                      <div class="field"><label>Discount %</label><input type="number" id="pf-promo-discount" min="1" max="100" placeholder="e.g. 20"></div>
+                      <div class="field" style="flex-direction:row;align-items:center;gap:8px;padding-top:18px">
+                        <input type="checkbox" id="pf-promo-active" checked>
+                        <label for="pf-promo-active" style="margin:0">Active</label>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="field"><label>Start date</label><input type="date" id="pf-promo-start"></div>
+                      <div class="field"><label>End date</label><input type="date" id="pf-promo-end"></div>
+                    </div>
+                    <button type="button" class="btn btn-ghost btn-sm" id="removePromoBtn" style="display:none">Remove Promotion</button>
+                  </div>
+                </div>
+                <div class="form-actions">
+                  <button type="submit" class="btn btn-primary" id="product-form-submit">Save</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <section class="page" id="page-top-products">
+          <div class="page-header">
+            <h2>Top Products</h2>
+            <div class="filter-bar" style="margin:0">
+              <button class="filter-btn" data-range="day" onclick="loadTopProducts('day')">Today</button>
+              <button class="filter-btn" data-range="week" onclick="loadTopProducts('week')">This Week</button>
+              <button class="filter-btn" data-range="month" onclick="loadTopProducts('month')">This Month</button>
+              <button class="filter-btn active" data-range="all" onclick="loadTopProducts('all')">All Time</button>
+            </div>
+          </div>
+          <div id="top-products-list-page">
+            <p style="font-size:12px;color:var(--warm-gray)">Loading...</p>
+          </div>
+        </section>
+
+        <section class="page" id="page-orders">
+          <div class="page-header"><h2>Orders</h2></div>
+          <div class="search-bar">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="orders-search" placeholder="Search by order # or customer name..." oninput="searchOrders()">
+          </div>
+          <div class="filter-bar" id="orders-filter-bar">
+            <button class="filter-btn active" data-days="" onclick="setDaysFilter(this, '')">All time</button>
+            <button class="filter-btn" data-days="1" onclick="setDaysFilter(this, '1')">Today</button>
+            <button class="filter-btn" data-days="7" onclick="setDaysFilter(this, '7')">7 days</button>
+            <button class="filter-btn" data-days="30" onclick="setDaysFilter(this, '30')">30 days</button>
+            <button class="filter-btn" data-days="90" onclick="setDaysFilter(this, '90')">90 days</button>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead><tr><th>Order #</th><th>Customer</th><th>Total</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+              <tbody id="orders-tbody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="page" id="page-order-detail">
+          <div class="page-header">
+            <h2>Order <span id="odetail-number"></span></h2>
+            <button type="button" class="btn btn-ghost" onclick="showOrdersPage()">← Back to Orders</button>
+          </div>
+          <div class="odetail-body">
+            <div class="odetail-grid">
+              <div class="odetail-card">
+                <h4>Customer</h4>
+                <div class="odetail-info">
+                  <div><span class="label">Name</span><span class="value" id="odetail-customer"></span></div>
+                  <div><span class="label">Phone</span><span class="value" id="odetail-phone"></span></div>
+                  <div><span class="label">Email</span><span class="value" id="odetail-email"></span></div>
+                </div>
+              </div>
+              <div class="odetail-card">
+                <h4>Delivery</h4>
+                <div class="odetail-info">
+                  <div><span class="label">Delivery Type</span><span class="value" id="odetail-delivery-type"></span></div>
+                  <div><span class="label">Wilaya</span><span class="value" id="odetail-wilaya"></span></div>
+                  <div><span class="label">Commune</span><span class="value" id="odetail-commune"></span></div>
+                  <div><span class="label">Address</span><span class="value" id="odetail-address"></span></div>
+                </div>
+              </div>
+              <div class="odetail-card">
+                <h4>Payment</h4>
+                <div class="odetail-info">
+                  <div><span class="label">Subtotal</span><span class="value" id="odetail-subtotal"></span></div>
+                  <div><span class="label">Delivery Fee</span><span class="value" id="odetail-fee"></span></div>
+                  <div><span class="label">Total</span><span class="value" id="odetail-total"></span></div>
+                  <div><span class="label">Method</span><span class="value" id="odetail-method"></span></div>
+                  <div><span class="label">Notes</span><span class="value" id="odetail-notes"></span></div>
+                </div>
+              </div>
+              <div class="odetail-card">
+                <h4>Status</h4>
+                <select class="status-select" id="odetail-status" aria-label="Order status">
+                  <option value="pending">Pending</option>
+                  <option value="confirmed">Confirmed</option>
+                  <option value="shipped">Shipped</option>
+                  <option value="delivered">Delivered</option>
+                  <option value="returned">Returned</option>
+                  <option value="cancelled">Cancelled</option>
+                </select>
+              </div>
+            </div>
+            <div class="odetail-card" style="margin-top:20px">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+                <h4 style="margin:0">Items</h4>
+                <button class="btn btn-danger btn-sm" id="odetail-delete-btn">Delete Order</button>
+              </div>
+              <table class="drawer-items-table">
+                <thead><tr><th style="width:50px">Image</th><th>Product</th><th>Size</th><th>Qty</th><th>Price</th></tr></thead>
+                <tbody id="odetail-items"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section class="page" id="page-contact">
+          <div class="page-header"><h2>Contact Messages</h2></div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead><tr><th>Name</th><th>Phone</th><th>Email</th><th>Message</th><th>Date</th><th>Actions</th></tr></thead>
+              <tbody id="contact-tbody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="page" id="page-audit">
+          <div class="page-header">
+            <h2>Activity Log</h2>
+            <button type="button" class="btn btn-danger btn-sm" id="clear-audit-btn" onclick="clearAuditLog()">Clear Activity</button>
+          </div>
+          <div class="search-bar" style="gap:8px;flex-wrap:wrap">
+            <select id="audit-action-filter" onchange="loadAuditLogs()" style="padding:8px 12px;border:1px solid var(--border);border-radius:6px;background:var(--card-bg);color:var(--text);font-size:12px;font-family:inherit">
+              <option value="">All actions</option>
+            </select>
+            <span style="font-size:11px;color:var(--warm-gray)" id="audit-count"></span>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead><tr><th>Time</th><th>Admin</th><th>Action</th><th>Resource</th></tr></thead>
+              <tbody id="audit-tbody"></tbody>
+            </table>
+          </div>
+          <div class="pagination-bar" id="audit-pagination" style="display:none;margin-top:16px;display:flex;align-items:center;justify-content:center;gap:12px">
+            <button class="btn btn-ghost btn-sm" id="audit-prev" onclick="auditPage(-1)" disabled>← Prev</button>
+            <span style="font-size:12px;color:var(--warm-gray)" id="audit-page-info">Page 1</span>
+            <button class="btn btn-ghost btn-sm" id="audit-next" onclick="auditPage(1)">Next →</button>
+          </div>
+        </section>
+
+        <section class="page" id="page-categories">
+          <div class="page-header"><h2>Categories</h2></div>
+          <div class="form-card" style="max-width:500px;margin-bottom:20px">
+            <form id="category-form" style="display:flex;gap:8px;align-items:flex-end">
+              <div class="field" style="flex:1;margin-bottom:0">
+                <label>Category Name</label>
+                <input type="text" id="cat-name" placeholder="e.g. Accessories" required>
+              </div>
+              <div class="field" style="flex:1;margin-bottom:0">
+                <label>Slug</label>
+                <input type="text" id="cat-slug" placeholder="accessories" required>
+              </div>
+              <button type="submit" class="btn btn-primary" style="white-space:nowrap">+ Add</button>
+            </form>
+            <p id="cat-error" class="form-error" style="margin-top:8px"></p>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead><tr><th>Name</th><th>Slug</th><th>Products</th><th></th></tr></thead>
+              <tbody id="categories-tbody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="page" id="page-badges">
+          <div class="page-header"><h2>Badges</h2></div>
+          <div class="form-card" style="max-width:400px;margin-bottom:20px">
+            <form id="badge-form" style="display:flex;gap:8px;align-items:flex-end">
+              <div class="field" style="flex:1;margin-bottom:0">
+                <label>Badge Name</label>
+                <input type="text" id="badge-name" placeholder="e.g. Sale" required>
+              </div>
+              <button type="submit" class="btn btn-primary" style="white-space:nowrap">+ Add</button>
+            </form>
+            <p id="badge-error" class="form-error" style="margin-top:8px"></p>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead><tr><th>Name</th><th>Products</th><th></th></tr></thead>
+              <tbody id="badges-tbody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="page" id="page-settings">
+          <div class="page-header"><h2>Profile</h2></div>
+          <div class="form-card" style="max-width:420px">
+            <form id="profile-form">
+              <div class="field">
+                <label>Current Email</label>
+                <input type="email" id="profile-current-email" readonly style="background:var(--hover);opacity:0.7">
+              </div>
+              <div class="field">
+                <label>New Email</label>
+                <input type="email" id="profile-email" placeholder="admin@lorenzo.dz">
+              </div>
+              <div class="field">
+                <label>Current Password</label>
+                <input type="password" id="profile-current-pwd" required placeholder="Enter current password">
+              </div>
+              <div class="field">
+                <label>New Password</label>
+                <input type="password" id="profile-new-pwd" placeholder="Leave blank to keep current">
+              </div>
+              <p id="profile-status" style="font-size:12px;color:var(--warm-gray);margin-top:8px"></p>
+              <div class="form-actions" style="margin-top:16px">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+              </div>
+            </form>
+          </div>
+        </section>
+      </main>
+
+      <!-- Notification Bell -->
+      <div class="bell-wrapper">
+        <button class="floating-bell" id="floating-bell" title="Notifications">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="bell-badge" id="bell-badge" style="display:none">0</span>
+        </button>
+        <div class="notification-dropdown" id="notification-dropdown" style="display:none"></div>
+      </div>
+    </div>
+
+  <!-- Order Detail Drawer -->
+  <div class="drawer-overlay" id="drawer-overlay"></div>
+  <div class="drawer" id="drawer">
+    <div class="drawer-header">
+      <h3>Order <span id="drawer-order-number"></span></h3>
+      <button type="button" class="drawer-close" onclick="closeDrawer()">&#10005;</button>
+    </div>
+    <div class="drawer-body">
+      <div class="drawer-section">
+        <h4>Customer</h4>
+        <div class="drawer-info-grid">
+          <div class="drawer-info-item"><span class="label">Name</span><span class="value" id="drawer-customer"></span></div>
+          <div class="drawer-info-item"><span class="label">Phone</span><span class="value" id="drawer-phone"></span></div>
+          <div class="drawer-info-item"><span class="label">Email</span><span class="value" id="drawer-email"></span></div>
+        </div>
+      </div>
+      <div class="drawer-section">
+        <h4>Delivery</h4>
+        <div class="drawer-info-grid">
+          <div class="drawer-info-item"><span class="label">Delivery Type</span><span class="value" id="drawer-delivery-type"></span></div>
+          <div class="drawer-info-item"><span class="label">Wilaya</span><span class="value" id="drawer-wilaya"></span></div>
+          <div class="drawer-info-item"><span class="label">Commune</span><span class="value" id="drawer-commune"></span></div>
+          <div class="drawer-info-item"><span class="label">Address</span><span class="value" id="drawer-address"></span></div>
+        </div>
+      </div>
+      <div class="drawer-section">
+        <h4>Payment</h4>
+        <div class="drawer-info-grid">
+          <div class="drawer-info-item"><span class="label">Subtotal</span><span class="value" id="drawer-subtotal"></span></div>
+          <div class="drawer-info-item"><span class="label">Delivery Fee</span><span class="value" id="drawer-fee"></span></div>
+          <div class="drawer-info-item"><span class="label">Total</span><span class="value" id="drawer-total"></span></div>
+          <div class="drawer-info-item"><span class="label">Method</span><span class="value" id="drawer-method"></span></div>
+          <div class="drawer-info-item"><span class="label">Notes</span><span class="value" id="drawer-notes"></span></div>
+        </div>
+      </div>
+      <div class="drawer-section">
+        <h4>Status</h4>
+        <select class="status-select" id="drawer-status" aria-label="Order status">
+          <option value="pending">Pending</option>
+          <option value="confirmed">Confirmed</option>
+          <option value="shipped">Shipped</option>
+          <option value="delivered">Delivered</option>
+          <option value="returned">Returned</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+      </div>
+      <div class="drawer-section">
+        <button class="btn btn-danger" id="drawer-delete-btn" onclick="deleteOrder()">Delete Order</button>
+      </div>
+      <div class="drawer-section">
+        <h4>Items</h4>
+        <table class="drawer-items-table">
+          <thead><tr><th style="width:50px">Image</th><th>Product</th><th>Size</th><th>Qty</th><th>Price</th></tr></thead>
+          <tbody id="drawer-items"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirm Modal -->
+  <div class="confirm-overlay" id="confirm-overlay"></div>
+  <div class="confirm-modal" id="confirm-modal" role="alertdialog" aria-modal="true" aria-labelledby="confirm-title">
+    <div class="confirm-header">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <span id="confirm-title">Confirm</span>
+    </div>
+    <div class="confirm-body">
+      <p id="confirm-message">Are you sure?</p>
+    </div>
+    <div class="confirm-actions">
+      <button type="button" class="btn btn-ghost" id="confirm-cancel">Cancel</button>
+      <button type="button" class="btn btn-danger" id="confirm-ok">Delete</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

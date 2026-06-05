@@ -1,0 +1,15 @@
+.confirmation-overlay {
+    position: fixed; inset: 0; background: var(--ivory); z-index: 300;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 40px 32px; text-align: center; opacity: 0; pointer-events: none; transition: opacity 0.4s;
+}
+.confirmation-overlay.show { opacity: 1; pointer-events: all; }
+.check-circle { width: 72px; height: 72px; border-radius: 50%; border: 2px solid var(--gold); display: flex; align-items: center; justify-content: center; margin: 0 auto 28px; animation: scaleIn 0.5s var(--ease-out) both; }
+.check-circle svg { width: 32px; height: 32px; stroke: var(--gold); stroke-dasharray: 100; stroke-dashoffset: 100; animation: checkDraw 0.6s var(--ease-out) 0.4s forwards; }
+.confirm-eyebrow { font-size: 9px; font-weight: 400; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; }
+.confirm-title { font-family: var(--font-display); font-size: 34px; font-weight: 300; font-style: italic; margin-bottom: 10px; }
+.confirm-sub { font-size: 13px; font-weight: 300; color: var(--warm-gray); line-height: 1.7; max-width: 320px; margin: 0 auto 12px; }
+.confirm-order-num { font-size: 10px; font-weight: 500; letter-spacing: 0.22em; color: var(--charcoal); background: var(--ivory-deep); padding: 8px 20px; border: 1px solid var(--border); display: inline-block; margin-bottom: 32px; }
+.confirm-actions { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 300px; }
+.confirm-wa-btn { background: #25D366; color: white; font-size: 10px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; padding: 14px; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; border: none; font-family: var(--font-body); }
+.confirm-continue-btn { background: transparent; color: var(--warm-gray); font-size: 10px; font-weight: 400; letter-spacing: 0.14em; text-transform: uppercase; padding: 12px; border: 1px solid var(--border); cursor: pointer; font-family: var(--font-body); }

@@ -1,0 +1,37 @@
+### Get all products
+GET http://localhost:3001/api/products
+
+### Get single product
+GET http://localhost:3001/api/products/milano-blazer
+
+### Get all wilayas
+GET http://localhost:3001/api/wilayas
+
+### Place order
+POST http://localhost:3001/api/orders
+Content-Type: application/json
+
+{
+  "customer": {
+    "name": "Yacine Ouali",
+    "phone": "+213555123456"
+  },
+  "delivery": {
+    "wilaya": "Sétif",
+    "wilaya_code": 19,
+    "commune": "El Eulma",
+    "address": "15 Rue des Frères Bouaziz"
+  },
+  "items": [
+    {
+      "product_id": null,
+      "name": "Milano Blazer",
+      "size": "M",
+      "qty": 1,
+      "price": 8900
+    }
+  ]
+}
+
+### Track order (replace LRZ-XXXXXXXX-XXXX with actual number)
+GET http://localhost:3001/api/orders/LRZ-20260530-0001

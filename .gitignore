@@ -1,0 +1,28 @@
+# Secrets
+api/.env
+.env
+
+# Dependencies
+api/node_modules/
+node_modules/
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+*.sublime-*
+
+# Media (not needed in repo)
+*.mp4
+*.mov
+*.avi
+
+# Local reference files (not needed on GitHub)
+docs/
+supabase/
+
+# Generated bundle (rebuild via `node bundle.mjs`)
+old/assets/dist/

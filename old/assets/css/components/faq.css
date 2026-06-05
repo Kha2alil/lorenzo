@@ -1,0 +1,30 @@
+.faq-header { background: var(--charcoal); padding: 48px 24px 36px; text-align: center; position: relative; overflow: hidden; }
+.faq-header::before {
+  content: ''; position: absolute; inset: 0;
+  background-image:
+    repeating-linear-gradient(90deg, rgba(201,168,76,0.04) 0px, rgba(201,168,76,0.04) 1px, transparent 1px, transparent 48px),
+    repeating-linear-gradient(0deg, rgba(201,168,76,0.04) 0px, rgba(201,168,76,0.04) 1px, transparent 1px, transparent 48px);
+}
+.faq-header-eyebrow { font-size: 9px; font-weight: 400; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; position: relative; }
+.faq-header-title { font-family: var(--font-display); font-size: clamp(28px, 6vw, 44px); font-weight: 300; font-style: italic; color: var(--ivory); position: relative; }
+
+[data-theme="dark"] .faq-header { background: #1A1A18; }
+[data-theme="dark"] .faq-header-title { color: #F5F0E8; }
+
+.faq-list { padding: 32px 24px; max-width: 720px; margin: 0 auto; display: flex; flex-direction: column; gap: 0; }
+.faq-item { border-bottom: 1px solid var(--border); }
+.faq-question {
+  width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 18px 0; background: none; border: none; cursor: pointer;
+  font-family: var(--font-body); font-size: 13px; font-weight: 500; color: var(--charcoal);
+  text-align: left; line-height: 1.4; transition: color 0.2s;
+}
+.faq-question:hover { color: var(--gold); }
+.faq-question svg { width: 16px; height: 16px; stroke: var(--light-gray); flex-shrink: 0; transition: transform 0.3s var(--ease-out); }
+.faq-item.open .faq-question svg { transform: rotate(45deg); }
+.faq-answer {
+  max-height: 0; overflow: hidden; transition: max-height 0.35s var(--ease-out), padding 0.35s var(--ease-out);
+  font-size: 13px; font-weight: 300; color: var(--warm-gray); line-height: 1.7;
+}
+.faq-item.open .faq-answer { max-height: 300px; padding-bottom: 18px; }
+.faq-answer a { color: var(--gold); text-decoration: underline; }

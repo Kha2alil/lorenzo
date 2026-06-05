@@ -1,0 +1,1 @@
+-- Settings table removed — SMTP configured via .env only
