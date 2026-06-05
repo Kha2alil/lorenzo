@@ -13,6 +13,18 @@ document.addEventListener('DOMContentLoaded', async () => {
   el('ordersTickerText') && setInterval(cycleTicker, 4000);
 
   initMobileVideo();
+
+  // Update sticky bar text on language switch
+  document.addEventListener('langchange', () => {
+    const btn = document.getElementById('stickyOrderBtnDirect');
+    if (btn && btn.textContent.includes('\u2014')) {
+      // Extract price part and rebuild with translated prefix
+      const parts = btn.textContent.split('\u2014');
+      if (parts.length > 1) {
+        btn.textContent = t('sticky.ordernow') + ' \u2014' + parts.slice(1).join('\u2014');
+      }
+    }
+  });
 });
 
 function toggleFaq(btn) {

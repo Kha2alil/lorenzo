@@ -224,6 +224,45 @@ const LANG = {
     'ticker.min': '{n} min ago',
     'ticker.hour': '{n} hour ago',
     'ticker.hours': '{n} hours ago',
+    // Page
+    'page.title': 'LORENZO — Italian Menswear | Premium Men\'s Fashion Algeria',
+    // A11y / tooltips
+    'skipLink': 'Skip to main content',
+    'logo.tagline': 'Italian Menswear',
+    'theme.toggle': 'Toggle theme',
+    // Hero (with HTML)
+    'hero.title': 'The Art of<br><em>Understated</em><br>Elegance',
+    // Section titles (with HTML)
+    'featured.title': 'Featured <em>Collection</em>',
+    'bestsellers.title': 'Best <em>Sellers</em>',
+    'track.title': 'Track Your <em>Order</em>',
+    'contact.title': 'We\'re Always <em>Here</em>',
+    'faq.title': 'Frequently Asked <em>Questions</em>',
+    // Detail trust badges
+    'detail.trust.cod': 'Cash on Delivery',
+    'detail.trust.returns': 'Free Returns',
+    'detail.trust.nationwide': 'Nationwide',
+    // Sticky bar
+    'sticky.size': 'Size',
+    'sticky.ordernow': 'Order Now',
+    // Order drawer
+    'order.optional': '(optional)',
+    'order.phoneplaceholder': 'XX XXX XXXX',
+    // Footer
+    'footer.link.sizeguide': 'Size Guide',
+    'footer.link.location': 'Our Location',
+    'footer.mapTitle': 'Lorenzo Magasin Store Location',
+    // A11y aria-labels
+    'a11y.wa': 'Contact us on WhatsApp',
+    'a11y.logo': 'Go to homepage',
+    'a11y.shopPrev': 'Previous',
+    'a11y.shopNext': 'Next',
+    'a11y.navHome': 'Home',
+    'a11y.navShop': 'Shop',
+    'a11y.navCart': 'Open cart',
+    'a11y.navTrack': 'Track order',
+    'a11y.cartClose': 'Close cart',
+    'a11y.orderClose': 'Close order form',
   },
 
   fr: {
@@ -431,6 +470,36 @@ const LANG = {
     'ticker.min': 'il y a {n} min',
     'ticker.hour': 'il y a {n} heure',
     'ticker.hours': 'il y a {n} heures',
+    'page.title': 'LORENZO — Prêt-à-porter Italien | Mode Homme Premium Algérie',
+    'skipLink': 'Passer au contenu principal',
+    'logo.tagline': 'Prêt-à-porter Italien',
+    'theme.toggle': 'Changer le thème',
+    'hero.title': 'L\'Art de l\'<br><em>Élégance</em><br><em>Sobre</em>',
+    'featured.title': 'Collection <em>Phare</em>',
+    'bestsellers.title': 'Meilleures <em>Ventes</em>',
+    'track.title': 'Suivez Votre <em>Commande</em>',
+    'contact.title': 'Nous Sommes <em>Toujours Là</em>',
+    'faq.title': 'Foire Aux <em>Questions</em>',
+    'detail.trust.cod': 'Paiement à la livraison',
+    'detail.trust.returns': 'Retours gratuits',
+    'detail.trust.nationwide': 'Partout en Algérie',
+    'sticky.size': 'Taille',
+    'sticky.ordernow': 'Commander',
+    'order.optional': '(optionnel)',
+    'order.phoneplaceholder': 'XX XXX XXXX',
+    'footer.link.sizeguide': 'Guide des tailles',
+    'footer.link.location': 'Notre adresse',
+    'footer.mapTitle': 'Emplacement du magasin Lorenzo',
+    'a11y.wa': 'Contactez-nous sur WhatsApp',
+    'a11y.logo': 'Aller à l\'accueil',
+    'a11y.shopPrev': 'Précédent',
+    'a11y.shopNext': 'Suivant',
+    'a11y.navHome': 'Accueil',
+    'a11y.navShop': 'Boutique',
+    'a11y.navCart': 'Ouvrir le panier',
+    'a11y.navTrack': 'Suivi de commande',
+    'a11y.cartClose': 'Fermer le panier',
+    'a11y.orderClose': 'Fermer le formulaire',
   },
 
   ar: {
@@ -638,6 +707,36 @@ const LANG = {
     'ticker.min': 'منذ {n} دقيقة',
     'ticker.hour': 'منذ {n} ساعة',
     'ticker.hours': 'منذ {n} ساعات',
+    'page.title': 'لورينزو — ملابس رجالية إيطالية | أزياء راقية للرجال في الجزائر',
+    'skipLink': 'تخطى إلى المحتوى الرئيسي',
+    'logo.tagline': 'ملابس رجالية إيطالية',
+    'theme.toggle': 'تغيير المظهر',
+    'hero.title': 'فن<br><em>الأناقة</em><br><em>المتحفظة</em>',
+    'featured.title': 'المجموعة <em>المميزة</em>',
+    'bestsellers.title': 'الأكثر <em>مبيعاً</em>',
+    'track.title': 'تتبع <em>طلبك</em>',
+    'contact.title': 'نحن دائماً <em>هنا</em>',
+    'faq.title': 'الأسئلة <em>الشائعة</em>',
+    'detail.trust.cod': 'الدفع عند الاستلام',
+    'detail.trust.returns': 'إرجاع مجاني',
+    'detail.trust.nationwide': 'توصيل وطني',
+    'sticky.size': 'المقاس',
+    'sticky.ordernow': 'اطلب الآن',
+    'order.optional': '(اختياري)',
+    'order.phoneplaceholder': 'XX XXX XXXX',
+    'footer.link.sizeguide': 'دليل المقاسات',
+    'footer.link.location': 'موقعنا',
+    'footer.mapTitle': 'موقع متجر لورينزو',
+    'a11y.wa': 'تواصل معنا عبر واتساب',
+    'a11y.logo': 'انتقل إلى الصفحة الرئيسية',
+    'a11y.shopPrev': 'السابق',
+    'a11y.shopNext': 'التالي',
+    'a11y.navHome': 'الرئيسية',
+    'a11y.navShop': 'المتجر',
+    'a11y.navCart': 'فتح السلة',
+    'a11y.navTrack': 'تتبع الطلب',
+    'a11y.cartClose': 'إغلاق السلة',
+    'a11y.orderClose': 'إغلاق نموذج الطلب',
   }
 };
 
@@ -668,6 +767,19 @@ function setLanguage(lang) {
         }
       }
     }
+  });
+  // Update page <title>
+  const pageTitle = t('page.title');
+  if (pageTitle && pageTitle !== 'page.title') document.title = pageTitle;
+  // Update title attributes
+  document.querySelectorAll('[data-i18n-title]').forEach(el => {
+    const val = t(el.dataset.i18nTitle);
+    if (val !== undefined) el.title = val;
+  });
+  // Update aria-label attributes
+  document.querySelectorAll('[data-i18n-aria]').forEach(el => {
+    const val = t(el.dataset.i18nAria);
+    if (val !== undefined) el.setAttribute('aria-label', val);
   });
   // Update active switcher button
   document.querySelectorAll('.lang-switcher-btn').forEach(b => {

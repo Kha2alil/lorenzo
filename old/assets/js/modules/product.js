@@ -21,7 +21,7 @@ function openProduct(slug) {
     document.getElementById('detailPrice').innerHTML = currentProduct.price.toLocaleString('fr-DZ') + ' <span>DZD</span>';
     document.getElementById('detailCartPrice').textContent = currentProduct.price.toLocaleString('fr-DZ') + ' DZD';
   }
-  document.getElementById('stickyOrderBtnDirect').textContent = 'Order Now \u2014 ' + (currentProduct.promotion ? currentProduct.discountedPrice : currentProduct.price).toLocaleString('fr-DZ') + ' DZD';
+  document.getElementById('stickyOrderBtnDirect').textContent = t('sticky.ordernow') + ' \u2014 ' + (currentProduct.promotion ? currentProduct.discountedPrice : currentProduct.price).toLocaleString('fr-DZ') + ' DZD';
   document.getElementById('detailDesc').textContent = currentProduct.desc;
 
   const allImages = currentProduct.allImages || [currentProduct.img];
@@ -33,11 +33,11 @@ function openProduct(slug) {
 
   const thumbsEl = document.getElementById('galleryThumbs');
   thumbsEl.innerHTML = allImages.map((url, i) => `
-    <div class="gallery-thumb ${i===0?'active':''}" onclick="switchGalleryImg(this,'${url}',${i+1})">
+    <div class="gallery-thumb ${i===0?'active':''}" onclick="switchGalleryImg(this,'${attrEsc(url)}',${i+1})">
       <img src="${url}" alt="${currentProduct.name}" loading="lazy" onload="this.classList.add('loaded')">
     </div>`).join('');
   document.getElementById('galleryCounter').textContent = '1 / ' + allImages.length;
-  document.getElementById('stickyOrderBtnDirect').textContent = `Order Now \u2014 ${currentProduct.price.toLocaleString('fr-DZ')} DZD`;
+  document.getElementById('stickyOrderBtnDirect').textContent = t('sticky.ordernow') + ` \u2014 ${currentProduct.price.toLocaleString('fr-DZ')} DZD`;
 
   renderSizeGrid();
   renderStickySizes();
@@ -45,6 +45,7 @@ function openProduct(slug) {
   renderColorSwatches([]);
 
   fetch(API_BASE + '/api/products/' + slug).then(r => r.json()).then(detail => {
+    if (currentProductSlug !== slug) return;
     if (detail) {
       if (detail.unavailable_sizes) currentProduct.unavailableSizes = detail.unavailable_sizes;
       if (detail.promotion) currentProduct.promotion = detail.promotion;
@@ -56,7 +57,7 @@ function openProduct(slug) {
           : '';
         document.getElementById('detailPrice').innerHTML = '<span class="price-original">' + currentProduct.price.toLocaleString('fr-DZ') + '</span> <span class="price-sale">' + currentProduct.discountedPrice.toLocaleString('fr-DZ') + ' <span>DZD</span></span>' + endDateStr;
         document.getElementById('detailCartPrice').innerHTML = '<span class="price-original">' + currentProduct.price.toLocaleString('fr-DZ') + '</span> ' + currentProduct.discountedPrice.toLocaleString('fr-DZ') + ' DZD';
-        document.getElementById('stickyOrderBtnDirect').textContent = 'Order Now \u2014 ' + currentProduct.discountedPrice.toLocaleString('fr-DZ') + ' DZD';
+        document.getElementById('stickyOrderBtnDirect').textContent = t('sticky.ordernow') + ' \u2014 ' + currentProduct.discountedPrice.toLocaleString('fr-DZ') + ' DZD';
       }
       if (detail.images && detail.images.length > 0) {
         const detailImages = detail.images.map(img => ({ url: imgUrl(img.storage_path), colorId: img.color_id || null }));
@@ -72,7 +73,7 @@ function openProduct(slug) {
           thumbsEl2.innerHTML = images.map((img, i) => {
             const url = img.url || img;
             const cid = img.colorId || '';
-            return `<div class="gallery-thumb ${i===0?'active':''}" onclick="switchGalleryImg(this,'${url}',${i+1},'${cid}')">
+            return `<div class="gallery-thumb ${i===0?'active':''}" onclick="switchGalleryImg(this,'${attrEsc(url)}',${i+1},'${attrEsc(cid)}')">
               <img src="${url}" alt="${currentProduct.name}" loading="lazy" onload="this.classList.add('loaded')">
             </div>`;
           }).join('');
@@ -197,7 +198,7 @@ function filterGalleryByColor(colorId) {
   const thumbsEl = document.getElementById('galleryThumbs');
   thumbsEl.innerHTML = images.map((img, i) => {
     const cid = img.colorId || '';
-    return `<div class="gallery-thumb ${i===0?'active':''}" onclick="switchGalleryImg(this,'${img.url}',${i+1},'${cid}')">
+    return `<div class="gallery-thumb ${i===0?'active':''}" onclick="switchGalleryImg(this,'${attrEsc(img.url)}',${i+1},'${attrEsc(cid)}')">
       <img src="${img.url}" alt="${currentProduct.name}" loading="lazy" onload="this.classList.add('loaded')">
     </div>`;
   }).join('');
