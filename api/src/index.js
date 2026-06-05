@@ -113,8 +113,14 @@ app.use(helmet({
   }
 }));
 const extraOrigins = process.env.CORS_ORIGINS ? process.env.CORS_ORIGINS.split(',').map(s => s.trim()).filter(Boolean) : [];
+const corsOrigins = [
+  'http://localhost:3001', 'http://localhost:5502', 'http://localhost:5500',
+  'http://127.0.0.1:3001', 'http://127.0.0.1:5500', 'http://127.0.0.1:5502',
+  'https://inquisitive-paletas-14d9ea.netlify.app',
+  ...extraOrigins
+];
 app.use(cors({
-  origin: ['http://localhost:3001', 'http://localhost:5502', 'http://localhost:5500', 'http://127.0.0.1:3001', 'http://127.0.0.1:5500', 'http://127.0.0.1:5502', ...extraOrigins],
+  origin: corsOrigins,
   credentials: true
 }));
 app.use(express.json({ limit: '1mb' }));

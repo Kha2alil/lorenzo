@@ -16,7 +16,6 @@ Thumbs.db
 *.sublime-*
 
 # Media (not needed in repo)
-*.mp4
 *.mov
 *.avi
 
