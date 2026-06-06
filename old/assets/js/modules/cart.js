@@ -95,7 +95,7 @@ function renderCartItems() {
 
 function addToCartDetail() {
   if (currentProduct && currentProduct.colors && currentProduct.colors.length > 0 && !selectedColor) {
-    showCartToast(t('prod.selectcolor'));
+    showCartToast(t('prod.mustselectcolor'));
     return false;
   }
   addToCart(currentProductSlug, selectedSize, selectedColor, selectedColorHex);
@@ -104,7 +104,7 @@ function addToCartDetail() {
 
 function orderNow() {
   if (currentProduct && currentProduct.colors && currentProduct.colors.length > 0 && !selectedColor) {
-    showCartToast(t('prod.selectcolor'));
+    showCartToast(t('prod.mustselectcolor'));
     return;
   }
   addToCart(currentProductSlug, selectedSize, selectedColor, selectedColorHex);
@@ -138,7 +138,7 @@ let toastTimer = null;
 function showCartToast(name) {
   const toast = document.getElementById('cartToast');
   if (!toast) return;
-  toast.querySelector('.toast-name').textContent = `${name} ${t('cart.added')}`;
+  toast.querySelector('.toast-name').textContent = name;
   toast.classList.add('show');
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => toast.classList.remove('show'), 2400);

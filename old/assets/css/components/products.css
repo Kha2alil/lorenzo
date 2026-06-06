@@ -263,3 +263,7 @@
 }
 .sticky-order-btn:active { background: var(--gold-light); }
 
+@media (max-width: 768px) {
+  .product-rating { display: none; }
+}
+

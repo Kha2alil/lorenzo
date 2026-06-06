@@ -224,7 +224,10 @@
             <button type="button" class="btn btn-primary" id="add-product-btn">+ Add Product</button>
           </div>
           <div class="table-wrap" id="products-table-wrap">
-            <input type="text" id="products-search" placeholder="Search products by name..." oninput="filterProducts()">
+            <div class="search-bar">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="products-search" placeholder="Search products by name..." oninput="filterProducts()">
+            </div>
             <table class="data-table">
               <thead><tr><th>Name</th><th>Category</th><th>Price</th><th>Badge</th><th>Status</th><th colspan="2"></th></tr></thead>
               <tbody id="products-tbody"></tbody>

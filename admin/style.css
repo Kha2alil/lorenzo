@@ -532,13 +532,17 @@ body {
   display: flex; align-items: center; gap: 8px;
   padding: 8px 12px; margin-bottom: 12px;
   border: 1px solid var(--border); background: var(--ivory);
+  border-radius: 6px;
+  min-height: 38px;
 }
 .search-bar svg { stroke: var(--warm-gray); flex-shrink: 0; }
 .search-bar input {
-  flex: 1; border: none; background: none;
+  flex: 1; border: none; background: none; outline: none;
   font-family: var(--font-body); font-size: 12px; color: var(--charcoal);
+  padding: 6px 0;
 }
 .search-bar input::placeholder { color: var(--light-gray); }
+.search-bar:focus-within { border-color: var(--charcoal); }
 .filter-bar { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
 .filter-btn {
   padding: 6px 14px; font-size: 10px; font-family: var(--font-body);

@@ -426,6 +426,16 @@ async function deleteCategory(slug) {
   } catch (e) { alert(e.message); }
 }
 
+document.getElementById('cat-name').addEventListener('input', function () {
+  const slugEl = document.getElementById('cat-slug');
+  if (!slugEl.dataset.manuallyEdited) {
+    slugEl.value = this.value.toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+  }
+});
+document.getElementById('cat-slug').addEventListener('input', function () {
+  this.dataset.manuallyEdited = this.value !== document.getElementById('cat-name').value.toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '') ? 'true' : '';
+});
+
 document.getElementById('category-form').addEventListener('submit', async e => {
   e.preventDefault();
   const name = document.getElementById('cat-name').value.trim();
@@ -446,6 +456,7 @@ document.getElementById('category-form').addEventListener('submit', async e => {
     }
     document.getElementById('cat-name').value = '';
     document.getElementById('cat-slug').value = '';
+    delete document.getElementById('cat-slug').dataset.manuallyEdited;
     errorEl.textContent = '';
     loadCategories();
     populateCategoryDropdown();

@@ -72,6 +72,7 @@ async function loadProducts() {
 function renderAllProducts() {
   renderFeaturedCollection();
   renderBestSellers();
+  renderSuits();
   renderShopGrid();
   renderCartItems();
 }
@@ -129,6 +130,31 @@ function renderBestSellers() {
       </div>
       <div class="product-info">
         <p class="product-cat">${p.category.split(' · ')[0]}</p>
+        <h3 class="product-name">${p.name}</h3>
+        <div class="product-price-row">${priceHtml}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderSuits() {
+  const track = document.getElementById('suitsTrack');
+  if (!track) return;
+  const items = productsList.filter(p => p.categorySlug === 'suits');
+  track.innerHTML = items.map(p => {
+    const priceHtml = p.promotion
+      ? `<span class="product-price"><span class="price-original">${p.price.toLocaleString('fr-DZ')}</span> <span class="price-sale">${p.discountedPrice.toLocaleString('fr-DZ')} <span>DZD</span></span></span>`
+      : `<span class="product-price">${p.price.toLocaleString('fr-DZ')} <span>DZD</span></span>`;
+    return `
+    <div class="product-card" onclick="openProduct('${attrEsc(p.slug)}')">
+      <div class="product-img-wrap">
+        <img class="product-photo" src="${p.img}" alt="${p.name}" loading="lazy" onload="this.classList.add('loaded')">
+        ${p.badge ? `<span class="product-tag ${p.badge === 'Bestseller' ? 'tag-gold' : 'tag-dark'}">${p.badge}</span>` : ''}
+        ${p.promotion ? '<span class="product-tag tag-sale">-' + p.promotion.discount_percent + '%</span>' : ''}
+        <div class="card-order-btn" onclick="event.stopPropagation();quickAdd('${attrEsc(p.slug)}')">${t('prod.addtocart')}</div>
+      </div>
+      <div class="product-info">
+        <p class="product-cat">Suits</p>
         <h3 class="product-name">${p.name}</h3>
         <div class="product-price-row">${priceHtml}</div>
       </div>

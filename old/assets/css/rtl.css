@@ -58,3 +58,4 @@
 [dir="rtl"] .slider-header { direction: rtl; }
 [dir="rtl"] .wa-float { right: auto; left: 32px; }
 @media (max-width: 768px) { [dir="rtl"] .wa-float { right: auto; left: 16px; } }
+[dir="rtl"] .logo-svg-wrap svg { direction: ltr; }
