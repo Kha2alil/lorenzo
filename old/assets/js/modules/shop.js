@@ -39,4 +39,25 @@ function initFilterArrows() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', initFilterArrows);
+async function loadCategories() {
+  try {
+    const res = await fetch(API_BASE + '/api/products/categories');
+    if (!res.ok) { console.error('Categories fetch failed:', res.status); return; }
+    const cats = await res.json();
+    if (!cats || !cats.length) { console.log('No categories returned from API'); return; }
+    const container = document.getElementById('shopFilters');
+    if (!container) return;
+    cats.forEach(c => {
+      const btn = document.createElement('button');
+      btn.className = 'filter-chip';
+      btn.textContent = c.name;
+      btn.onclick = function () { filterShop(this, c.slug); };
+      container.appendChild(btn);
+    });
+  } catch (err) { console.error('loadCategories error:', err); }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  initFilterArrows();
+  loadCategories();
+});

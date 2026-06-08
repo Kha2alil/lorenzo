@@ -45,6 +45,13 @@ router.get('/image/*', async (req, res, next) => {
   }
 });
 
+router.get('/categories', async (req, res, next) => {
+  try {
+    const { data } = await supabase.from('categories').select('slug,name').order('name');
+    res.json(data || []);
+  } catch (err) { next(err); }
+});
+
 router.get('/', async (req, res, next) => {
   try {
     const page = Math.max(1, parseInt(req.query.page, 10) || 1);

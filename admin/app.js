@@ -1269,9 +1269,15 @@ document.getElementById('profile-form').addEventListener('submit', async e => {
   const statusEl = document.getElementById('profile-status');
   statusEl.textContent = 'Saving...';
   statusEl.style.color = 'var(--warm-gray)';
+  const newEmail = document.getElementById('profile-email').value.trim();
+  if (newEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmail)) {
+    statusEl.textContent = 'Please enter a valid email address.';
+    statusEl.style.color = 'var(--error)';
+    return;
+  }
   const body = {
     current_password: document.getElementById('profile-current-pwd').value,
-    new_email: document.getElementById('profile-email').value.trim() || undefined,
+    new_email: newEmail || undefined,
     new_password: document.getElementById('profile-new-pwd').value || undefined
   };
   try {
