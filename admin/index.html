@@ -543,6 +543,10 @@
                 <label for="profile-email">New Email</label>
                 <input type="email" id="profile-email" placeholder="admin@lorenzo.dz" aria-label="New email" title="New email">
               </div>
+              <div class="field hidden" id="profile-otp-field">
+                <label for="profile-email-otp">Email Verification Code</label>
+                <input type="text" id="profile-email-otp" placeholder="Enter the 6-digit code" maxlength="6" aria-label="Email verification code" title="Email verification code">
+              </div>
               <div class="field">
                 <label for="profile-current-pwd">Current Password</label>
                 <input type="password" id="profile-current-pwd" required placeholder="Enter current password" aria-label="Current password" title="Current password">
@@ -553,7 +557,7 @@
               </div>
               <p id="profile-status" class="u-text-sm u-text-warm u-mt-8"></p>
               <div class="form-actions u-mt-16">
-                <button type="submit" class="btn btn-primary">Save Changes</button>
+                <button type="submit" class="btn btn-primary" id="profile-save-btn">Save Changes</button>
               </div>
             </form>
           </div>

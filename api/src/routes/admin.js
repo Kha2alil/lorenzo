@@ -1,12 +1,15 @@
 const { Router } = require('express');
-const crypto = require('crypto');
 const multer = require('multer');
 const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const supabase = require('../db');
 const { requireAuth, JWT_SECRET } = require('../middleware/auth');
 const { audit } = require('../middleware/audit');
 const { sendOTP } = require('../utils/email');
+
+// In-memory store for email verification OTPs
+const emailOtpStore = new Map();
 
 
 const upload = multer({
@@ -920,6 +923,28 @@ router.get('/top-products', async (req, res, next) => {
   } catch (err) { next(err); }
 });
 
+// ───── Send email verification OTP ─────
+router.post('/send-email-otp', async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ error: 'Email is required' });
+    const trimmed = email.toLowerCase().trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
+      return res.status(400).json({ error: 'Invalid email format' });
+    }
+
+    const otp = String(crypto.randomInt(100000, 999999));
+    emailOtpStore.set(trimmed, { otp, expiresAt: Date.now() + 10 * 60 * 1000 });
+
+    const result = await sendOTP(trimmed, otp);
+    if (!result.sent && !result.otp) {
+      return res.status(500).json({ error: 'Failed to send verification email. Check SMTP configuration.' });
+    }
+
+    res.json({ message: 'Verification code sent. Valid for 10 minutes.' });
+  } catch (err) { next(err); }
+});
+
 router.get('/profile', async (req, res, next) => {
   try {
     const email = req.admin.email;
@@ -929,7 +954,7 @@ router.get('/profile', async (req, res, next) => {
 
 router.put('/profile', async (req, res, next) => {
   try {
-    const { current_password, new_email, new_password } = req.body;
+    const { current_password, new_email, new_password, email_otp } = req.body;
     if (!current_password) return res.status(400).json({ error: 'Current password is required' });
 
     const { data: admin, error } = await supabase
@@ -945,6 +970,15 @@ router.put('/profile', async (req, res, next) => {
     const updates = {};
     if (new_email) {
       const trimmed = new_email.toLowerCase().trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
+        return res.status(400).json({ error: 'Invalid email format' });
+      }
+      // Verify OTP
+      const stored = emailOtpStore.get(trimmed);
+      if (!stored || stored.otp !== email_otp || Date.now() > stored.expiresAt) {
+        return res.status(400).json({ error: 'Invalid or expired verification code. Request a new one.' });
+      }
+      emailOtpStore.delete(trimmed);
       const { data: existing } = await supabase.from('admin_users').select('id').eq('email', trimmed).maybeSingle();
       if (existing) return res.status(409).json({ error: 'Email already in use' });
       updates.email = trimmed;

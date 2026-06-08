@@ -1267,18 +1267,46 @@ async function loadProfile() {
 document.getElementById('profile-form').addEventListener('submit', async e => {
   e.preventDefault();
   const statusEl = document.getElementById('profile-status');
-  statusEl.textContent = 'Saving...';
-  statusEl.style.color = 'var(--warm-gray)';
+  const saveBtn = document.getElementById('profile-save-btn');
   const newEmail = document.getElementById('profile-email').value.trim();
+  const otpField = document.getElementById('profile-otp-field');
+  const emailOtp = document.getElementById('profile-email-otp').value.trim();
+
+  statusEl.style.color = 'var(--warm-gray)';
+
   if (newEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmail)) {
-    statusEl.textContent = 'Please enter a valid email address.';
+    statusEl.textContent = 'Please enter a valid email address (e.g. user@domain.com).';
     statusEl.style.color = 'var(--error)';
     return;
   }
+
+  // If new email is set and OTP field is hidden, send OTP first
+  if (newEmail && otpField.classList.contains('hidden')) {
+    statusEl.textContent = 'Sending verification code...';
+    saveBtn.disabled = true;
+    try {
+      const res = await fetch(API + '/send-email-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...(getToken() ? { 'Authorization': 'Bearer ' + getToken() } : {}) },
+        body: JSON.stringify({ email: newEmail })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed');
+      otpField.classList.remove('hidden');
+      document.getElementById('profile-email-otp').value = '';
+      statusEl.textContent = 'Verification code sent to ' + newEmail + '. Enter it below to confirm.';
+      statusEl.style.color = '#2E7D32';
+      saveBtn.disabled = false;
+    } catch (err) { statusEl.textContent = err.message; statusEl.style.color = 'var(--error)'; saveBtn.disabled = false; }
+    return;
+  }
+
+  statusEl.textContent = 'Saving...';
   const body = {
     current_password: document.getElementById('profile-current-pwd').value,
     new_email: newEmail || undefined,
-    new_password: document.getElementById('profile-new-pwd').value || undefined
+    new_password: document.getElementById('profile-new-pwd').value || undefined,
+    email_otp: emailOtp || undefined
   };
   try {
     const res = await fetch(API + '/profile', {
@@ -1295,6 +1323,8 @@ document.getElementById('profile-form').addEventListener('submit', async e => {
     document.getElementById('profile-current-pwd').value = '';
     document.getElementById('profile-new-pwd').value = '';
     document.getElementById('profile-email').value = '';
+    document.getElementById('profile-email-otp').value = '';
+    otpField.classList.add('hidden');
     if (data.token) { setToken(data.token); }
   } catch (err) { statusEl.textContent = err.message; statusEl.style.color = 'var(--error)'; }
 });
