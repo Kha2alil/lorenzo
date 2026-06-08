@@ -25,7 +25,6 @@ const LANG = {
     'hero.track': 'Track Order',
     'hero.scroll': 'Scroll',
     // Announcement
-    'announce': 'Free delivery on your first order · Cash on delivery across Algeria · New collection available now',
     // Featured
     'featured.label': 'New Arrivals',
     'featured.title1': 'Featured',
@@ -205,6 +204,7 @@ const LANG = {
     'confirm.title': 'Grazie mille!',
     'confirm.sub': 'Your order has been received. We\'ll confirm it shortly.',
     'confirm.continue': 'Continue Shopping',
+    'confirm.print': '🖨 Print Receipt',
     // Size Guide
     'sizeguide.title1': 'Size',
     'sizeguide.title2': 'Guide',
@@ -295,7 +295,6 @@ const LANG = {
     'hero.cta': 'Découvrir la Collection',
     'hero.track': 'Suivre ma commande',
     'hero.scroll': 'Défiler',
-    'announce': 'Livraison offerte sur votre première commande · Paiement à la livraison · Nouvelle collection disponible',
     'featured.label': 'Nouveautés',
     'featured.title1': 'Collection',
     'featured.title2': 'Phare',
@@ -462,6 +461,7 @@ const LANG = {
     'confirm.title': 'Grazie mille !',
     'confirm.sub': 'Votre commande a été reçue. Nous la confirmons sous peu.',
     'confirm.continue': 'Continuer vos achats',
+    'confirm.print': '🖨 Imprimer le reçu',
     'sizeguide.title1': 'Guide des',
     'sizeguide.title2': 'Tailles',
     'sizeguide.note': 'Toutes les mesures sont en centimètres.',
@@ -539,7 +539,6 @@ const LANG = {
     'hero.cta': 'اكتشف المجموعة',
     'hero.track': 'تتبع الطلب',
     'hero.scroll': 'مرر للأسفل',
-    'announce': 'توصيل مجاني لطلبيتك الأولى · الدفع عند الاستلام عبر الجزائر · المجموعة الجديدة متاحة الآن',
     'featured.label': 'وصل حديثاً',
     'featured.title1': 'المجموعة',
     'featured.title2': 'المميزة',
@@ -706,6 +705,7 @@ const LANG = {
     'confirm.title': 'غرازييه ميللي!',
     'confirm.sub': 'تم استلام طلبك. سنؤكده قريباً.',
     'confirm.continue': 'مواصلة التسوق',
+    'confirm.print': '🖨 طباعة الإيصال',
     'sizeguide.title1': 'دليل',
     'sizeguide.title2': 'المقاسات',
     'sizeguide.note': 'جميع القياسات بالسنتيمتر.',

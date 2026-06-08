@@ -1,6 +1,6 @@
 .hero {
     position: relative;
-    height: calc(100dvh - var(--nav-h) - 32px);
+    height: calc(100dvh - var(--nav-h));
     overflow: hidden;
 }
 .hero-media-container {
@@ -10,6 +10,7 @@
 .hero-bg-img {
     width: 100%; height: 100%;
     object-fit: cover;
+    object-position: center top;
     transform: scale(1.06);
     animation: heroZoom 12s var(--ease) forwards;
     filter: brightness(0.45);

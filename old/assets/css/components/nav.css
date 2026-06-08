@@ -10,21 +10,6 @@
     white-space: nowrap;
 }
 
-.announce {
-    background: var(--charcoal);
-    color: var(--ivory);
-    text-align: center;
-    padding: 9px 20px;
-    font-size: 10px;
-    font-weight: 400;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    position: relative;
-    z-index: 200;
-}
-.announce span { color: var(--gold); }
-[data-theme="dark"] .announce { background: #1A1A18; color: #F5F0E8; }
-
 .top-nav {
     position: sticky;
     top: 0;

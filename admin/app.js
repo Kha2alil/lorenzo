@@ -53,8 +53,18 @@ document.getElementById('login-form').addEventListener('submit', async e => {
 // ───── Forgot Password ─────
 document.getElementById('forgot-back').addEventListener('click', e => {
   e.preventDefault();
+  resetForgotScreen();
   showScreen('login-screen');
 });
+function resetForgotScreen() {
+  document.getElementById('forgot-email-field').classList.remove('hidden');
+  document.getElementById('forgot-submit-btn').classList.remove('hidden');
+  document.getElementById('forgot-continue-btn').classList.add('hidden');
+  document.getElementById('forgot-error').textContent = '';
+  document.getElementById('forgot-success').textContent = '';
+  document.getElementById('forgot-email').value = '';
+  sessionStorage.removeItem('reset_email');
+}
 
 document.getElementById('forgot-form').addEventListener('submit', async e => {
   e.preventDefault();
@@ -64,20 +74,36 @@ document.getElementById('forgot-form').addEventListener('submit', async e => {
   errEl.textContent = '';
   successEl.textContent = '';
   try {
-    const res = await fetch(API + '/forgot-password', {
+    const res = await fetch(API + '/send-otp', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email })
     });
     const data = await res.json();
     if (!res.ok) { errEl.textContent = data.error; return; }
+    document.getElementById('forgot-email-field').classList.add('hidden');
+    document.getElementById('forgot-submit-btn').classList.add('hidden');
+    document.getElementById('forgot-continue-btn').classList.remove('hidden');
+    sessionStorage.setItem('reset_email', email);
     successEl.textContent = data.message;
   } catch { errEl.textContent = 'Connection error'; }
 });
 
+function goToResetFromOtp() {
+  const email = sessionStorage.getItem('reset_email');
+  if (!email) { showScreen('forgot-screen'); return; }
+  document.getElementById('reset-email').value = email;
+  document.getElementById('reset-token').value = '';
+  document.getElementById('reset-pwd').value = '';
+  document.getElementById('reset-error').textContent = '';
+  document.getElementById('reset-success').textContent = '';
+  showScreen('reset-screen');
+}
+
 // ───── Reset Password ─────
 document.getElementById('reset-back').addEventListener('click', e => {
   e.preventDefault();
+  sessionStorage.removeItem('reset_email');
   showScreen('login-screen');
 });
 
@@ -101,6 +127,7 @@ document.getElementById('reset-form').addEventListener('submit', async e => {
     successEl.textContent = data.message;
     document.getElementById('reset-pwd').value = '';
     document.getElementById('reset-token').value = '';
+    sessionStorage.removeItem('reset_email');
     setTimeout(() => showScreen('login-screen'), 2000);
   } catch { errEl.textContent = 'Connection error'; }
 });
@@ -1537,10 +1564,8 @@ function showNewOrderToast(count) {
 
     document.getElementById('forgot-link-inline').addEventListener('click', e => {
       e.preventDefault();
+      resetForgotScreen();
       showScreen('forgot-screen');
-      document.getElementById('forgot-error').textContent = '';
-      document.getElementById('forgot-success').textContent = '';
-      document.getElementById('forgot-token-box').classList.add('hidden');
     });
 
     document.getElementById('reset-link-inline').addEventListener('click', e => {

@@ -7,14 +7,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=Jost:wght@200;300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  <style>
-    .hidden { display: none !important; }
-    .full-width { width: 100%; }
-    .auth-back-link { font-size:11px;color:#8A8478;text-decoration:none;display:inline-block;margin-bottom:24px; }
-    .auth-back-link:hover { color:#1A1A18; }
-    .reset-token-box { background:#EDE7D9;border:1px solid rgba(26,26,24,0.12);padding:16px;font-size:12px;word-break:break-all;margin-bottom:16px; }
-    .reset-token-box code { font-size:11px;color:#1A1A18; }
-  </style>
 </head>
 <body>
   <div id="app">
@@ -48,17 +40,14 @@
         <a href="#" class="auth-back-link" id="forgot-back">← Back to Sign In</a>
         <p class="login-subtitle">Reset Password</p>
         <form id="forgot-form">
-          <div class="field">
+          <div class="field" id="forgot-email-field">
             <label for="forgot-email">Email</label>
             <input type="email" id="forgot-email" placeholder="admin@lorenzo.dz" required>
           </div>
           <p id="forgot-error" class="form-error"></p>
-          <p id="forgot-success" class="form-error" style="color:#2E7D32"></p>
-          <div id="forgot-token-box" class="reset-token-box hidden">
-            <p style="font-size:10px;color:#8A8478;margin-bottom:8px">Copy this reset token (valid for 15 min):</p>
-            <code id="forgot-token-value"></code>
-          </div>
-          <button type="submit" class="btn btn-primary full-width">Send Reset Link</button>
+          <p id="forgot-success" class="form-error u-text-green"></p>
+          <button type="submit" class="btn btn-primary full-width" id="forgot-submit-btn">Send OTP</button>
+          <button type="button" class="btn btn-primary full-width hidden u-mt-8" id="forgot-continue-btn" onclick="goToResetFromOtp()">I Have the OTP — Continue</button>
         </form>
       </div>
     </div>
@@ -74,15 +63,15 @@
             <input type="email" id="reset-email" required>
           </div>
           <div class="field">
-            <label for="reset-token">Reset Token</label>
-            <input type="text" id="reset-token" placeholder="Paste the reset token" required>
+            <label for="reset-token">OTP Code</label>
+            <input type="text" id="reset-token" placeholder="Enter the 6-digit OTP" maxlength="6" required>
           </div>
           <div class="field">
             <label for="reset-pwd">New Password</label>
             <input type="password" id="reset-pwd" placeholder="Min 6 characters" required minlength="6">
           </div>
           <p id="reset-error" class="form-error"></p>
-          <p id="reset-success" class="form-error" style="color:#2E7D32"></p>
+          <p id="reset-success" class="form-error u-text-green"></p>
           <button type="submit" class="btn btn-primary full-width">Reset Password</button>
         </form>
       </div>
@@ -141,7 +130,7 @@
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
             Sign Out
           </a>
-          <a href="#" id="theme-toggle-btn" onclick="toggleAdminTheme()" style="margin-top:12px;display:flex;align-items:center;gap:10px;font-size:12px;color:#8A8478;text-decoration:none">
+          <a href="#" id="theme-toggle-btn" class="u-sidebar-link" onclick="toggleAdminTheme()">
             <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
             <svg class="moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
             <span id="theme-toggle-label">Dark Mode</span>
@@ -163,7 +152,7 @@
           </div>
 
           <!-- Row 2: Products Sold -->
-          <h3 style="margin-top:28px;margin-bottom:12px;font-size:13px;font-weight:500;color:var(--warm-gray);text-transform:uppercase;letter-spacing:0.5px">Products Sold</h3>
+          <h3 class="u-mt-28 u-mb-12 u-text-sm u-text-warm u-text-caps">Products Sold</h3>
           <div class="stats-grid">
             <div class="stat-card"><span class="stat-number" id="stat-sold-today">—</span><span class="stat-label">Today</span></div>
             <div class="stat-card"><span class="stat-number" id="stat-sold-week">—</span><span class="stat-label">This Week</span></div>
@@ -173,7 +162,7 @@
           </div>
 
           <!-- Row 3: Revenue -->
-          <h3 style="margin-top:28px;margin-bottom:12px;font-size:13px;font-weight:500;color:var(--warm-gray);text-transform:uppercase;letter-spacing:0.5px">Revenue</h3>
+          <h3 class="u-mt-28 u-mb-12 u-text-sm u-text-warm u-text-caps">Revenue</h3>
           <div class="stats-grid">
             <div class="stat-card"><span class="stat-number" id="stat-revenue-today">—</span><span class="stat-label">Today</span></div>
             <div class="stat-card"><span class="stat-number" id="stat-revenue-week">—</span><span class="stat-label">This Week</span></div>
@@ -182,7 +171,7 @@
           </div>
 
           <!-- Row 4: Two columns - Status breakdown + Top products -->
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:28px">
+          <div class="u-grid-2col u-mt-28">
             <!-- Status breakdown -->
             <div class="overview-card">
               <h3 class="overview-card-title">Orders by Status</h3>
@@ -196,7 +185,7 @@
           </div>
 
           <!-- Row 5: Orders by category -->
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:24px">
+          <div class="u-grid-2col u-mt-24">
             <div class="overview-card">
               <h3 class="overview-card-title">Products by Category</h3>
               <div id="category-breakdown"></div>
@@ -209,7 +198,7 @@
 
           <!-- Recent Orders -->
           <div class="overview-orders">
-            <div class="page-header" style="margin-top:32px"><h3>Recent Orders</h3></div>
+            <div class="page-header u-mt-28"><h3>Recent Orders</h3></div>
             <div class="table-wrap">
               <table class="data-table">
                 <thead><tr><th>Order #</th><th>Customer</th><th>Total</th><th>Status</th><th>Date</th><th></th></tr></thead>
@@ -229,45 +218,45 @@
               <input type="text" id="products-search" placeholder="Search products by name..." oninput="filterProducts()">
             </div>
             <table class="data-table">
-              <thead><tr><th>Name</th><th>Category</th><th>Price</th><th>Badge</th><th>Status</th><th colspan="2"></th></tr></thead>
+              <thead><tr><th>Name</th><th>Category</th><th>Price</th><th>Badge</th><th>Status</th><th colspan="2" aria-label="actions"></th></tr></thead>
               <tbody id="products-tbody"></tbody>
             </table>
           </div> 
 
           <div class="form-overlay hidden" id="product-form-container">
-            <div class="form-card wide-form" style="max-height:90vh;overflow-y:auto">
-              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+            <div class="form-card wide-form u-max-w-90vh u-overflow-auto">
+              <div class="u-flex-between u-mb-16">
                 <h3 id="product-form-title">Add Product</h3>
                 <button type="button" class="btn-icon" id="product-form-cancel" title="Close"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
               </div>
               <form id="product-form">
                 <input type="hidden" id="pf-id">
                 <div class="form-row">
-                  <div class="field"><label>Name *</label><input type="text" id="pf-name" required></div>
-                  <div class="field"><label>Slug *</label><input type="text" id="pf-slug" required></div>
+                  <div class="field"><label for="pf-name">Name *</label><input type="text" id="pf-name" required aria-label="Product name" title="Product name"></div>
+                  <div class="field"><label for="pf-slug">Slug *</label><input type="text" id="pf-slug" required aria-label="Product slug" title="Product slug"></div>
                 </div>
                 <div class="form-row">
-                  <div class="field"><label>Category *</label>
-                    <select id="pf-category" required></select>
+                  <div class="field"><label for="pf-category">Category *</label>
+                    <select id="pf-category" required aria-label="Product category" title="Product category"></select>
                   </div>
-                  <div class="field"><label>Price (DZD) *</label><input type="number" id="pf-price" min="1" required></div>
+                  <div class="field"><label for="pf-price">Price (DZD) *</label><input type="number" id="pf-price" min="1" required aria-label="Product price in DZD" title="Product price in DZD"></div>
                 </div>
                 <div class="form-row">
-                  <div class="field"><label>Fabric</label><input type="text" id="pf-fabric"></div>
-                  <div class="field"><label>Badge</label>
-                    <select id="pf-badge">
+                  <div class="field"><label for="pf-fabric">Fabric</label><input type="text" id="pf-fabric" aria-label="Product fabric" title="Product fabric"></div>
+                  <div class="field"><label for="pf-badge">Badge</label>
+                    <select id="pf-badge" aria-label="Product badge" title="Product badge">
                       <option value="">None</option>
                     </select>
                   </div>
                 </div>
-                <div class="field"><label>Sizes (comma separated)</label><input type="text" id="pf-sizes" placeholder="e.g. S, M, L, XL"></div>
-                <div class="field"><label>Description</label><textarea id="pf-description" rows="3"></textarea></div>
+                <div class="field"><label for="pf-sizes">Sizes (comma separated)</label><input type="text" id="pf-sizes" placeholder="e.g. S, M, L, XL" aria-label="Product sizes" title="Product sizes"></div>
+                <div class="field"><label for="pf-description">Description</label><textarea id="pf-description" rows="3" aria-label="Product description" title="Product description"></textarea></div>
                 <div class="field">
                   <label>Images (max 5)</label>
                   <div class="image-upload-grid" id="imageUploadGrid">
                     <div class="image-upload-cell">
                       <div class="image-upload-slot" data-index="0">
-                        <input type="file" accept="image/*" class="pf-image-input" data-index="0">
+                        <input type="file" accept="image/*" class="pf-image-input" data-index="0" aria-label="Product image 1" title="Product image 1">
                         <div class="image-upload-placeholder">
                           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
                           <span>Image 1</span>
@@ -275,11 +264,11 @@
                         <div class="image-upload-preview"></div>
                         <button type="button" class="image-upload-remove" title="Remove image">&times;</button>
                       </div>
-                      <select class="image-color-select"><option value="">Any color</option></select>
+                      <select class="image-color-select" aria-label="Image 1 color" title="Image 1 color"><option value="">Any color</option></select>
                     </div>
                     <div class="image-upload-cell">
                       <div class="image-upload-slot" data-index="1">
-                        <input type="file" accept="image/*" class="pf-image-input" data-index="1">
+                        <input type="file" accept="image/*" class="pf-image-input" data-index="1" aria-label="Product image 2" title="Product image 2">
                         <div class="image-upload-placeholder">
                           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
                           <span>Image 2</span>
@@ -287,11 +276,11 @@
                         <div class="image-upload-preview"></div>
                         <button type="button" class="image-upload-remove" title="Remove image">&times;</button>
                       </div>
-                      <select class="image-color-select"><option value="">Any color</option></select>
+                      <select class="image-color-select" aria-label="Image 2 color" title="Image 2 color"><option value="">Any color</option></select>
                     </div>
                     <div class="image-upload-cell">
                       <div class="image-upload-slot" data-index="2">
-                        <input type="file" accept="image/*" class="pf-image-input" data-index="2">
+                        <input type="file" accept="image/*" class="pf-image-input" data-index="2" aria-label="Product image 3" title="Product image 3">
                         <div class="image-upload-placeholder">
                           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
                           <span>Image 3</span>
@@ -299,11 +288,11 @@
                         <div class="image-upload-preview"></div>
                         <button type="button" class="image-upload-remove" title="Remove image">&times;</button>
                       </div>
-                      <select class="image-color-select"><option value="">Any color</option></select>
+                      <select class="image-color-select" aria-label="Image 3 color" title="Image 3 color"><option value="">Any color</option></select>
                     </div>
                     <div class="image-upload-cell">
                       <div class="image-upload-slot" data-index="3">
-                        <input type="file" accept="image/*" class="pf-image-input" data-index="3">
+                        <input type="file" accept="image/*" class="pf-image-input" data-index="3" aria-label="Product image 4" title="Product image 4">
                         <div class="image-upload-placeholder">
                           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
                           <span>Image 4</span>
@@ -311,11 +300,11 @@
                         <div class="image-upload-preview"></div>
                         <button type="button" class="image-upload-remove" title="Remove image">&times;</button>
                       </div>
-                      <select class="image-color-select"><option value="">Any color</option></select>
+                      <select class="image-color-select" aria-label="Image 4 color" title="Image 4 color"><option value="">Any color</option></select>
                     </div>
                     <div class="image-upload-cell">
                       <div class="image-upload-slot" data-index="4">
-                        <input type="file" accept="image/*" class="pf-image-input" data-index="4">
+                        <input type="file" accept="image/*" class="pf-image-input" data-index="4" aria-label="Product image 5" title="Product image 5">
                         <div class="image-upload-placeholder">
                           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
                           <span>Image 5</span>
@@ -323,40 +312,40 @@
                         <div class="image-upload-preview"></div>
                         <button type="button" class="image-upload-remove" title="Remove image">&times;</button>
                       </div>
-                      <select class="image-color-select"><option value="">Any color</option></select>
+                      <select class="image-color-select" aria-label="Image 5 color" title="Image 5 color"><option value="">Any color</option></select>
                     </div>
                   </div>
-                  <span style="font-size:10px;color:#8A8478;display:block;margin-top:6px">First image = primary. Assign each image to a color so customers see the right image for each color.</span>
+                  <span class="u-text-10 u-text-warm u-block u-mt-6">First image = primary. Assign each image to a color so customers see the right image for each color.</span>
                 </div>
                 <div class="field" id="size-availability-field" style="display:none">
                   <label>Availability</label>
                   <div class="size-toggles" id="sizeToggles"></div>
-                  <span style="font-size:10px;color:#8A8478">Click a size to toggle as unavailable (out of stock)</span>
+                  <span class="u-text-10 u-text-warm">Click a size to toggle as unavailable (out of stock)</span>
                 </div>
                 <div class="field">
                   <label>Colors</label>
                   <div class="color-palette" id="colorPalette">
-                    <div class="color-palette-row" style="display:none" data-template>
-                      <input type="text" class="cp-name" placeholder="Color name">
-                      <input type="color" class="cp-hex" value="#1A1A18">
+                    <div class="color-palette-row u-hidden" data-template>
+                      <input type="text" class="cp-name" placeholder="Color name" aria-label="Color name" title="Color name">
+                      <input type="color" class="cp-hex" value="#1A1A18" aria-label="Color hex" title="Color hex">
                       <button type="button" class="cp-remove" title="Remove color">&times;</button>
                     </div>
                   </div>
-                  <button type="button" class="btn btn-ghost btn-sm" id="addColorBtn" style="margin-top:8px">+ Add Color</button>
+                  <button type="button" class="btn btn-ghost btn-sm u-mt-8" id="addColorBtn">+ Add Color</button>
                 </div>
                 <div class="field">
                   <label>Promotion</label>
                   <div class="promo-fields">
                     <div class="form-row">
-                      <div class="field"><label>Discount %</label><input type="number" id="pf-promo-discount" min="1" max="100" placeholder="e.g. 20"></div>
-                      <div class="field" style="flex-direction:row;align-items:center;gap:8px;padding-top:18px">
-                        <input type="checkbox" id="pf-promo-active" checked>
-                        <label for="pf-promo-active" style="margin:0">Active</label>
+                      <div class="field"><label for="pf-promo-discount">Discount %</label><input type="number" id="pf-promo-discount" min="1" max="100" placeholder="e.g. 20" aria-label="Promotion discount percentage" title="Promotion discount percentage"></div>
+                      <div class="field u-flex-row u-gap-8 u-pt-18">
+                        <input type="checkbox" id="pf-promo-active" checked aria-label="Promotion active" title="Promotion active">
+                        <label for="pf-promo-active" class="u-mr-0">Active</label>
                       </div>
                     </div>
                     <div class="form-row">
-                      <div class="field"><label>Start date</label><input type="date" id="pf-promo-start"></div>
-                      <div class="field"><label>End date</label><input type="date" id="pf-promo-end"></div>
+                      <div class="field"><label for="pf-promo-start">Start date</label><input type="date" id="pf-promo-start" aria-label="Promotion start date" title="Promotion start date"></div>
+                      <div class="field"><label for="pf-promo-end">End date</label><input type="date" id="pf-promo-end" aria-label="Promotion end date" title="Promotion end date"></div>
                     </div>
                     <button type="button" class="btn btn-ghost btn-sm" id="removePromoBtn" style="display:none">Remove Promotion</button>
                   </div>
@@ -372,15 +361,15 @@
         <section class="page" id="page-top-products">
           <div class="page-header">
             <h2>Top Products</h2>
-            <div class="filter-bar" style="margin:0">
-              <button class="filter-btn" data-range="day" onclick="loadTopProducts('day')">Today</button>
-              <button class="filter-btn" data-range="week" onclick="loadTopProducts('week')">This Week</button>
-              <button class="filter-btn" data-range="month" onclick="loadTopProducts('month')">This Month</button>
-              <button class="filter-btn active" data-range="all" onclick="loadTopProducts('all')">All Time</button>
+            <div class="filter-bar">
+              <button type="button" class="filter-btn" data-range="day" onclick="loadTopProducts('day')">Today</button>
+              <button type="button" class="filter-btn" data-range="week" onclick="loadTopProducts('week')">This Week</button>
+              <button type="button" class="filter-btn" data-range="month" onclick="loadTopProducts('month')">This Month</button>
+              <button type="button" class="filter-btn active" data-range="all" onclick="loadTopProducts('all')">All Time</button>
             </div>
           </div>
           <div id="top-products-list-page">
-            <p style="font-size:12px;color:var(--warm-gray)">Loading...</p>
+            <p class="u-text-sm u-text-warm">Loading...</p>
           </div>
         </section>
 
@@ -391,11 +380,11 @@
             <input type="text" id="orders-search" placeholder="Search by order # or customer name..." oninput="searchOrders()">
           </div>
           <div class="filter-bar" id="orders-filter-bar">
-            <button class="filter-btn active" data-days="" onclick="setDaysFilter(this, '')">All time</button>
-            <button class="filter-btn" data-days="1" onclick="setDaysFilter(this, '1')">Today</button>
-            <button class="filter-btn" data-days="7" onclick="setDaysFilter(this, '7')">7 days</button>
-            <button class="filter-btn" data-days="30" onclick="setDaysFilter(this, '30')">30 days</button>
-            <button class="filter-btn" data-days="90" onclick="setDaysFilter(this, '90')">90 days</button>
+            <button type="button" class="filter-btn active" data-days="" onclick="setDaysFilter(this, '')">All time</button>
+            <button type="button" class="filter-btn" data-days="1" onclick="setDaysFilter(this, '1')">Today</button>
+            <button type="button" class="filter-btn" data-days="7" onclick="setDaysFilter(this, '7')">7 days</button>
+            <button type="button" class="filter-btn" data-days="30" onclick="setDaysFilter(this, '30')">30 days</button>
+            <button type="button" class="filter-btn" data-days="90" onclick="setDaysFilter(this, '90')">90 days</button>
           </div>
           <div class="table-wrap">
             <table class="data-table">
@@ -451,13 +440,13 @@
                 </select>
               </div>
             </div>
-            <div class="odetail-card" style="margin-top:20px">
-              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-                <h4 style="margin:0">Items</h4>
+            <div class="odetail-card u-mt-20">
+              <div class="u-flex-between u-mb-12">
+                <h4 class="u-mr-0">Items</h4>
                 <button class="btn btn-danger btn-sm" id="odetail-delete-btn">Delete Order</button>
               </div>
               <table class="drawer-items-table">
-                <thead><tr><th style="width:50px">Image</th><th>Product</th><th>Size</th><th>Qty</th><th>Price</th></tr></thead>
+                <thead><tr><th class="u-table-th-img">Image</th><th>Product</th><th>Size</th><th>Qty</th><th>Price</th></tr></thead>
                 <tbody id="odetail-items"></tbody>
               </table>
             </div>
@@ -479,11 +468,11 @@
             <h2>Activity Log</h2>
             <button type="button" class="btn btn-danger btn-sm" id="clear-audit-btn" onclick="clearAuditLog()">Clear Activity</button>
           </div>
-          <div class="search-bar" style="gap:8px;flex-wrap:wrap">
-            <select id="audit-action-filter" onchange="loadAuditLogs()" style="padding:8px 12px;border:1px solid var(--border);border-radius:6px;background:var(--card-bg);color:var(--text);font-size:12px;font-family:inherit">
+          <div class="search-bar u-gap-8 u-flex-wrap">
+            <select class="audit-filter-select" id="audit-action-filter" onchange="loadAuditLogs()" aria-label="Filter audit actions" title="Filter audit actions">
               <option value="">All actions</option>
             </select>
-            <span style="font-size:11px;color:var(--warm-gray)" id="audit-count"></span>
+            <span class="u-text-11 u-text-warm" id="audit-count"></span>
           </div>
           <div class="table-wrap">
             <table class="data-table">
@@ -491,28 +480,28 @@
               <tbody id="audit-tbody"></tbody>
             </table>
           </div>
-          <div class="pagination-bar" id="audit-pagination" style="display:none;margin-top:16px;display:flex;align-items:center;justify-content:center;gap:12px">
+          <div class="pagination-bar u-mt-16 u-flex-center-justify u-gap-12" id="audit-pagination">
             <button class="btn btn-ghost btn-sm" id="audit-prev" onclick="auditPage(-1)" disabled>← Prev</button>
-            <span style="font-size:12px;color:var(--warm-gray)" id="audit-page-info">Page 1</span>
+            <span class="u-text-sm u-text-warm" id="audit-page-info">Page 1</span>
             <button class="btn btn-ghost btn-sm" id="audit-next" onclick="auditPage(1)">Next →</button>
           </div>
         </section>
 
         <section class="page" id="page-categories">
           <div class="page-header"><h2>Categories</h2></div>
-          <div class="form-card" style="max-width:500px;margin-bottom:20px">
-            <form id="category-form" style="display:flex;gap:8px;align-items:flex-end">
-              <div class="field" style="flex:1;margin-bottom:0">
+          <div class="form-card u-max-w-500 u-mb-20">
+            <form id="category-form" class="u-flex-row u-gap-8 u-items-end">
+              <div class="field u-flex-1 u-mb-0">
                 <label>Category Name</label>
                 <input type="text" id="cat-name" placeholder="e.g. Accessories" required>
               </div>
-              <div class="field" style="flex:1;margin-bottom:0">
+              <div class="field u-flex-1 u-mb-0">
                 <label>Slug</label>
                 <input type="text" id="cat-slug" placeholder="accessories" required>
               </div>
-              <button type="submit" class="btn btn-primary" style="white-space:nowrap">+ Add</button>
+              <button type="submit" class="btn btn-primary u-nowrap">+ Add</button>
             </form>
-            <p id="cat-error" class="form-error" style="margin-top:8px"></p>
+            <p id="cat-error" class="form-error u-mt-8"></p>
           </div>
           <div class="table-wrap">
             <table class="data-table">
@@ -524,15 +513,15 @@
 
         <section class="page" id="page-badges">
           <div class="page-header"><h2>Badges</h2></div>
-          <div class="form-card" style="max-width:400px;margin-bottom:20px">
-            <form id="badge-form" style="display:flex;gap:8px;align-items:flex-end">
-              <div class="field" style="flex:1;margin-bottom:0">
+          <div class="form-card u-max-w-400 u-mb-20">
+            <form id="badge-form" class="u-flex-row u-gap-8 u-items-end">
+              <div class="field u-flex-1 u-mb-0">
                 <label>Badge Name</label>
                 <input type="text" id="badge-name" placeholder="e.g. Sale" required>
               </div>
-              <button type="submit" class="btn btn-primary" style="white-space:nowrap">+ Add</button>
+              <button type="submit" class="btn btn-primary u-nowrap">+ Add</button>
             </form>
-            <p id="badge-error" class="form-error" style="margin-top:8px"></p>
+            <p id="badge-error" class="form-error u-mt-8"></p>
           </div>
           <div class="table-wrap">
             <table class="data-table">
@@ -544,26 +533,26 @@
 
         <section class="page" id="page-settings">
           <div class="page-header"><h2>Profile</h2></div>
-          <div class="form-card" style="max-width:420px">
+          <div class="form-card u-max-w-420">
             <form id="profile-form">
               <div class="field">
-                <label>Current Email</label>
-                <input type="email" id="profile-current-email" readonly style="background:var(--hover);opacity:0.7">
+                <label for="profile-current-email">Current Email</label>
+                <input type="email" id="profile-current-email" readonly class="u-readonly-bg" aria-label="Current email" title="Current email">
               </div>
               <div class="field">
-                <label>New Email</label>
-                <input type="email" id="profile-email" placeholder="admin@lorenzo.dz">
+                <label for="profile-email">New Email</label>
+                <input type="email" id="profile-email" placeholder="admin@lorenzo.dz" aria-label="New email" title="New email">
               </div>
               <div class="field">
-                <label>Current Password</label>
-                <input type="password" id="profile-current-pwd" required placeholder="Enter current password">
+                <label for="profile-current-pwd">Current Password</label>
+                <input type="password" id="profile-current-pwd" required placeholder="Enter current password" aria-label="Current password" title="Current password">
               </div>
               <div class="field">
-                <label>New Password</label>
-                <input type="password" id="profile-new-pwd" placeholder="Leave blank to keep current">
+                <label for="profile-new-pwd">New Password</label>
+                <input type="password" id="profile-new-pwd" placeholder="Leave blank to keep current" aria-label="New password" title="New password">
               </div>
-              <p id="profile-status" style="font-size:12px;color:var(--warm-gray);margin-top:8px"></p>
-              <div class="form-actions" style="margin-top:16px">
+              <p id="profile-status" class="u-text-sm u-text-warm u-mt-8"></p>
+              <div class="form-actions u-mt-16">
                 <button type="submit" class="btn btn-primary">Save Changes</button>
               </div>
             </form>
@@ -633,7 +622,7 @@
       <div class="drawer-section">
         <h4>Items</h4>
         <table class="drawer-items-table">
-          <thead><tr><th style="width:50px">Image</th><th>Product</th><th>Size</th><th>Qty</th><th>Price</th></tr></thead>
+          <thead><tr><th class="u-table-th-img">Image</th><th>Product</th><th>Size</th><th>Qty</th><th>Price</th></tr></thead>
           <tbody id="drawer-items"></tbody>
         </table>
       </div>

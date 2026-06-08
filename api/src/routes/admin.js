@@ -6,7 +6,8 @@ const jwt = require('jsonwebtoken');
 const supabase = require('../db');
 const { requireAuth, JWT_SECRET } = require('../middleware/auth');
 const { audit } = require('../middleware/audit');
-const { sendPasswordReset } = require('../utils/email');
+const { sendOTP } = require('../utils/email');
+
 
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -97,8 +98,8 @@ router.post('/setup', async (req, res, next) => {
   }
 });
 
-// ───── Forgot Password ─────
-router.post('/forgot-password', async (req, res, next) => {
+// ───── Send OTP ─────
+router.post('/send-otp', async (req, res, next) => {
   try {
     const { email } = req.body;
     if (!email) return res.status(400).json({ error: 'Email is required' });
@@ -110,22 +111,24 @@ router.post('/forgot-password', async (req, res, next) => {
       .maybeSingle();
 
     if (!admin) {
-      return res.json({ message: 'If that email exists, a reset link has been sent.' });
+      return res.status(404).json({ error: 'No admin account found with this email.' });
     }
 
-    const token = crypto.randomBytes(32).toString('hex');
+    const otp = String(crypto.randomInt(100000, 999999));
     const expiresAt = new Date(Date.now() + 15 * 60 * 1000).toISOString();
 
     const { error: insertErr } = await supabase
       .from('password_resets')
-      .insert({ email: admin.email, token, expires_at: expiresAt });
+      .insert({ email: admin.email, token: otp, expires_at: expiresAt });
 
     if (insertErr) throw insertErr;
 
-    const result = await sendPasswordReset(admin.email, token);
-    res.json({
-      message: 'If that email exists, a reset link has been sent.'
-    });
+    const result = await sendOTP(admin.email, otp);
+    if (!result.sent && !result.otp) {
+      return res.status(500).json({ error: 'Failed to send OTP email. Check SMTP configuration.' });
+    }
+
+    res.json({ message: 'OTP sent to your email. Valid for 15 minutes.', expires_in: 900 });
   } catch (err) { next(err); }
 });
 

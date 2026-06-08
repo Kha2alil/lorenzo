@@ -53,4 +53,35 @@ async function sendPasswordReset(email, resetToken) {
   }
 }
 
-module.exports = { sendPasswordReset };
+async function sendOTP(email, otp) {
+  const transporter = createTransporter();
+  if (!transporter) {
+    console.log(`[DEV] OTP for ${email}: ${otp}`);
+    return { sent: false, otp };
+  }
+
+  const fromName = process.env.SMTP_FROM_NAME || 'LORENZO Admin';
+  const fromEmail = process.env.SMTP_FROM || process.env.SMTP_USER;
+
+  try {
+    await transporter.sendMail({
+      from: `"${fromName}" <${fromEmail}>`,
+      to: email,
+      subject: 'LORENZO — Your OTP Code',
+      html: `
+        <div style="font-family:sans-serif;max-width:480px;margin:0 auto">
+          <h2 style="color:#C9A84C">LORENZO</h2>
+          <p>Use the OTP below to reset your admin password:</p>
+          <div style="font-size:32px;letter-spacing:6px;text-align:center;padding:20px;background:#EDE7D9;border-radius:6px;margin:16px 0;font-weight:600">${otp}</div>
+          <p style="color:#8A8478;font-size:12px">This OTP expires in 15 minutes. If you didn't request this, ignore this email.</p>
+        </div>
+      `
+    });
+    return { sent: true };
+  } catch (err) {
+    console.error('Failed to send OTP email:', err);
+    return { sent: false, error: err.message };
+  }
+}
+
+module.exports = { sendPasswordReset, sendOTP };

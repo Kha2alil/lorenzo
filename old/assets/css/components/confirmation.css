@@ -2,14 +2,94 @@
     position: fixed; inset: 0; background: var(--ivory); z-index: 300;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     padding: 40px 32px; text-align: center; opacity: 0; pointer-events: none; transition: opacity 0.4s;
+    overflow-y: auto;
 }
 .confirmation-overlay.show { opacity: 1; pointer-events: all; }
+.confirm-scroll-wrap { max-width: 420px; width: 100%; display: flex; flex-direction: column; align-items: center; }
 .check-circle { width: 72px; height: 72px; border-radius: 50%; border: 2px solid var(--gold); display: flex; align-items: center; justify-content: center; margin: 0 auto 28px; animation: scaleIn 0.5s var(--ease-out) both; }
 .check-circle svg { width: 32px; height: 32px; stroke: var(--gold); stroke-dasharray: 100; stroke-dashoffset: 100; animation: checkDraw 0.6s var(--ease-out) 0.4s forwards; }
 .confirm-eyebrow { font-size: 9px; font-weight: 400; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; }
 .confirm-title { font-family: var(--font-display); font-size: 34px; font-weight: 300; font-style: italic; margin-bottom: 10px; }
 .confirm-sub { font-size: 13px; font-weight: 300; color: var(--warm-gray); line-height: 1.7; max-width: 320px; margin: 0 auto 12px; }
-.confirm-order-num { font-size: 10px; font-weight: 500; letter-spacing: 0.22em; color: var(--charcoal); background: var(--ivory-deep); padding: 8px 20px; border: 1px solid var(--border); display: inline-block; margin-bottom: 32px; }
+.confirm-order-num { font-size: 10px; font-weight: 500; letter-spacing: 0.22em; color: var(--charcoal); background: var(--ivory-deep); padding: 8px 20px; border: 1px solid var(--border); display: inline-block; margin-bottom: 16px; }
+.confirm-receipt { width: 100%; text-align: left; border-top: 1px dashed var(--border); padding-top: 16px; margin-bottom: 20px; }
+.receipt-header { font-size: 9px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--warm-gray); margin-bottom: 12px; }
+.receipt-item { display: flex; flex-wrap: wrap; align-items: baseline; padding: 8px 0; border-bottom: 1px solid var(--border); }
+.receipt-item-name { flex: 1 1 100%; font-size: 12px; font-weight: 500; color: var(--charcoal); }
+.receipt-item-meta { font-size: 10px; color: var(--warm-gray); }
+.receipt-item-price { margin-left: auto; font-size: 11px; font-weight: 500; color: var(--charcoal); }
+.receipt-section-label { font-size: 9px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--warm-gray); margin-top: 12px; margin-bottom: 4px; }
+.receipt-address { font-size: 12px; color: var(--charcoal); }
+.receipt-phone { font-size: 11px; color: var(--warm-gray); margin-top: 2px; }
+.receipt-total { border-top: 1px solid var(--border); margin-top: 12px; padding-top: 10px; }
+.receipt-total-row { display: flex; justify-content: space-between; font-size: 11px; padding: 3px 0; color: var(--charcoal); }
+.receipt-grand { font-size: 13px; font-weight: 600; border-top: 1px solid var(--border); padding-top: 8px; margin-top: 4px; }
 .confirm-actions { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 300px; }
 .confirm-wa-btn { background: #25D366; color: white; font-size: 10px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; padding: 14px; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; border: none; font-family: var(--font-body); }
+.confirm-print-btn { background: var(--charcoal); color: var(--ivory); font-size: 10px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; padding: 12px; border: none; cursor: pointer; font-family: var(--font-body); border-radius: 4px; }
 .confirm-continue-btn { background: transparent; color: var(--warm-gray); font-size: 10px; font-weight: 400; letter-spacing: 0.14em; text-transform: uppercase; padding: 12px; border: 1px solid var(--border); cursor: pointer; font-family: var(--font-body); }
+
+@media print {
+  @page { margin: 1.2cm 0.8cm; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body * { visibility: hidden; }
+  .confirmation-overlay,
+  .confirmation-overlay * { visibility: visible; }
+  .confirmation-overlay {
+    position: fixed; inset: 0; background: #FAF7F2; z-index: 9999;
+    display: flex !important; opacity: 1 !important; pointer-events: none !important;
+    justify-content: center; padding: 0; overflow: visible;
+  }
+  .confirm-scroll-wrap {
+    max-width: 100%; width: 100%; padding: 0;
+    align-items: flex-start;
+  }
+  .check-circle, .confirm-eyebrow, .confirm-title, .confirm-sub,
+  .confirm-actions, .confirm-print-btn, .confirm-continue-btn { display: none !important; }
+
+  .confirm-order-num {
+    border: none; background: none; padding: 0 0 4px 0; margin-bottom: 0;
+    font-size: 11px; letter-spacing: 0.12em; display: block; text-align: left;
+    color: #C9A84C; font-weight: 600;
+  }
+
+  .confirm-receipt {
+    border: none; padding: 0; margin-bottom: 0;
+  }
+  .receipt-header {
+    font-size: 22px; color: #1A1A18; font-weight: 700; letter-spacing: 0.04em;
+    text-transform: uppercase; margin-bottom: 2px; padding-top: 0;
+    padding-bottom: 6px;
+  }
+  .receipt-header::after {
+    display: block; content: 'LORENZO — Italian Menswear';
+    font-size: 8px; font-weight: 400; color: #C9A84C;
+    letter-spacing: 0.18em; margin-top: 1px; text-transform: uppercase;
+  }
+  .receipt-header-line {
+    height: 2px; background: #C9A84C; margin: 8px 0 12px 0;
+    display: block;
+  }
+  .receipt-items { }
+  .receipt-item {
+    display: flex; flex-wrap: nowrap; align-items: center;
+    padding: 6px 0; border-bottom: 1px solid #E8E2D6;
+  }
+  .receipt-item-name { flex: 1; font-size: 11px; font-weight: 500; color: #1A1A18; }
+  .receipt-item-meta { font-size: 10px; color: #8A8478; margin-left: 8px; white-space: nowrap; }
+  .receipt-item-price { font-size: 11px; color: #1A1A18; margin-left: auto; white-space: nowrap; font-weight: 600; }
+  .receipt-section-label { font-size: 8px; color: #C9A84C; letter-spacing: 0.14em; margin-top: 10px; text-transform: uppercase; font-weight: 600; }
+  .receipt-address { font-size: 11px; color: #1A1A18; margin-top: 2px; }
+  .receipt-phone { font-size: 10px; color: #8A8478; margin-top: 1px; }
+  .receipt-total { border: none; margin-top: 6px; padding-top: 0; }
+  .receipt-total-row { font-size: 11px; padding: 2px 0; color: #1A1A18; }
+  .receipt-grand { font-size: 13px; font-weight: 700; border-top: 2px solid #C9A84C; padding-top: 6px; margin-top: 3px; color: #1A1A18; }
+
+  .confirm-receipt::after {
+    display: block; content: 'Grazie — LORENZO';
+    text-align: center; font-size: 10px; color: #C9A84C;
+    margin-top: 20px; padding-top: 10px;
+    border-top: 1px solid #C9A84C; letter-spacing: 0.2em;
+    font-weight: 500;
+  }
+}

@@ -157,6 +157,43 @@ function nextStep() {
   if (currentStep < 3) goToStep(currentStep + 1);
 }
 
+let lastOrderData = null;
+
+function renderReceipt(orderData) {
+  const itemsEl = document.getElementById('receiptItems');
+  itemsEl.innerHTML = orderData.items.map(item => `
+    <div class="receipt-item">
+      <span class="receipt-item-name">${item.name}</span>
+      <span class="receipt-item-meta">${item.size}${item.color ? ' · ' + item.color : ''} ×${item.qty}</span>
+      <span class="receipt-item-price">${(item.price * item.qty).toLocaleString('fr-DZ')} DZD</span>
+    </div>
+  `).join('');
+
+  const delivery = orderData.delivery;
+  const addrParts = [delivery.address, delivery.commune, delivery.wilaya].filter(Boolean);
+  document.getElementById('receiptDelivery').innerHTML = `
+    <div class="receipt-section-label">Delivering to</div>
+    <div class="receipt-address">${addrParts.join(', ')}</div>
+    <div class="receipt-phone">${orderData.customer.phone}</div>
+  `;
+
+  const subtotal = orderData.items.reduce((sum, item) => sum + item.price * item.qty, 0);
+  document.getElementById('receiptTotal').innerHTML = `
+    <div class="receipt-total-row">
+      <span>Subtotal</span>
+      <span>${subtotal.toLocaleString('fr-DZ')} DZD</span>
+    </div>
+    <div class="receipt-total-row">
+      <span>Delivery fee</span>
+      <span>${delivery.fee.toLocaleString('fr-DZ')} DZD</span>
+    </div>
+    <div class="receipt-total-row receipt-grand">
+      <span>Total to pay</span>
+      <span>${(subtotal + delivery.fee).toLocaleString('fr-DZ')} DZD</span>
+    </div>
+  `;
+}
+
 async function submitOrder() {
   const name = el('orderName').value.trim();
   const phone = normalizePhone(el('orderPhone').value);
@@ -203,6 +240,9 @@ async function submitOrder() {
     const result = await res.json();
     orderNumber = result.order_number;
 
+    lastOrderData = { ...payload, order_number: orderNumber };
+    renderReceipt(lastOrderData);
+
     closeOrderDrawer();
     document.body.style.overflow = '';
     el('confirmOrderNum').textContent = orderNumber;
@@ -214,6 +254,10 @@ async function submitOrder() {
   } catch (err) {
     alert(err.message);
   }
+}
+
+function printReceipt() {
+  window.print();
 }
 
 function closeConfirmation() {

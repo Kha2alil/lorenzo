@@ -20,24 +20,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=Jost:wght@200;300;400;500;600&family=Playfair+Display:ital,wght@1,400;1,500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css">
-<style>
-  .skip-link-inline { position:absolute; top:-999px; left:0; padding:12px 20px; background:#1A1A18; color:#F5F0E8; z-index:9999; font-size:14px; text-decoration:none; transition:top 0.1s; }
-  .skip-link:focus { top: 0 !important; }
-  .hero-bg-fade { opacity:0; transition:opacity 0.8s; }
-  .gallery-main-fade { opacity:0; transition:opacity 0.4s; }
-  .section-pad-featured { padding-top:clamp(32px,5vw,60px); padding-bottom:clamp(32px,5vw,60px); }
-  .section-label-tight { margin-bottom:4px; }
-  .section-title-no-margin { margin-bottom:0; }
-  .tracking-label-center { justify-content:center; }
-  .tracking-phone-row-hidden { display:none; }
-  .tracking-phone-wrap { flex:1; }
-  .contact-submit-spacing { margin-top:12px; }
-  .contact-status-text { margin-top:8px; font-size:12px; color:var(--warm-gray); }
-  .form-step-hidden { display:none; }
-  .delivery-est-hidden { display:none; }
-  .sizeguide-note { font-size:12px; color:var(--warm-gray); margin-bottom:16px; font-weight:300; }
-  .footer-map-iframe { border:0; display:block; }
-</style>
+
 </head>
 <body>
 <a href="#main-content" class="skip-link skip-link-inline" data-i18n="skipLink">Skip to main content</a>
@@ -51,11 +34,6 @@
 <!-- WHATSAPP FLOAT -->
 <div class="wa-float" onclick="openWhatsApp()" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')openWhatsApp()" data-i18n-aria="a11y.wa" aria-label="Contact us on WhatsApp">
   <svg viewBox="0 0 24 24" fill="white" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-</div>
-
-<!-- ANNOUNCE BAR -->
-<div class="announce" data-i18n="announce">
-  Free delivery on your first order &nbsp;<span>·</span>&nbsp; Cash on delivery across Algeria &nbsp;<span>·</span>&nbsp; New collection available now
 </div>
 
 <!-- TOP NAV -->
@@ -109,12 +87,11 @@
       <!-- Default background image -->
       <img
         id="heroBgImg"
-        class="hero-bg-img"
+        class="hero-bg-img hero-bg-fade"
         src="assets/images/hero-bg.jpg"
         alt="Lorenzo Hero"
         loading="eager"
         onload="this.style.opacity='1'"
-        class="hero-bg-img hero-bg-fade"
       >
       <!-- Video element (activated on mobile) -->
       <video
@@ -122,7 +99,6 @@
         class="hero-bg-video"
         muted
         loop
-        playsinline
       ></video>
     </div>
 
@@ -407,7 +383,7 @@
       <div class="contact-opt-info"><div class="contact-opt-title" data-i18n="contact.map">Our Location</div><div class="contact-opt-desc" data-i18n="contact.map-d">Visit our store — Setif, Algeria</div></div>
       <svg class="contact-opt-arrow" viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
     </div>
-    <a class="contact-option" href="tel:0558922277" style="text-decoration:none;color:inherit">
+    <a class="contact-option u-text-deco-none u-color-inherit" href="tel:0558922277">
       <div class="contact-opt-icon opt-phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
       <div class="contact-opt-info"><div class="contact-opt-title">Call Us</div><div class="contact-opt-desc">0558 92 22 77 — Owner direct line</div></div>
       <svg class="contact-opt-arrow" viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
@@ -547,7 +523,7 @@
     <button type="button" class="cart-drawer-close" onclick="closeCartDrawer()" aria-label="Close cart">×</button>
   </div>
   <div class="cart-items-list" id="cartItemsList"></div>
-  <div class="cart-footer" id="cartFooter" style="display:none">
+  <div class="cart-footer u-cart-footer-hidden" id="cartFooter">
     <div class="cart-subtotal-row">
       <span class="cart-subtotal-label" data-i18n="cart.subtotal">Subtotal</span>
       <span class="cart-subtotal-price" id="cartSubtotal">0 DZD</span>
@@ -684,15 +660,27 @@
   CONFIRMATION
 ============================================================ -->
 <div class="confirmation-overlay" id="confirmationOverlay" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
-  <div class="check-circle">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-  </div>
-  <div class="confirm-eyebrow" data-i18n="confirm.eyebrow">Order Placed</div>
-  <h2 class="confirm-title" id="confirmTitle" data-i18n="confirm.title">Grazie mille!</h2>
-  <p class="confirm-sub" data-i18n="confirm.sub">Your order has been received. We'll confirm it shortly.</p>
-  <div class="confirm-order-num" id="confirmOrderNum">LRZ-00000</div>
-  <div class="confirm-actions">
-    <button type="button" class="confirm-continue-btn" onclick="closeConfirmation()" data-i18n="confirm.continue">Continue Shopping</button>
+  <div class="confirm-scroll-wrap">
+    <div class="check-circle">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <div class="confirm-eyebrow" data-i18n="confirm.eyebrow">Order Placed</div>
+    <h2 class="confirm-title" id="confirmTitle" data-i18n="confirm.title">Grazie mille!</h2>
+    <p class="confirm-sub" data-i18n="confirm.sub">Your order has been received. We'll confirm it shortly.</p>
+    <div class="confirm-order-num" id="confirmOrderNum">LRZ-00000</div>
+
+    <div class="confirm-receipt" id="confirmReceipt">
+      <div class="receipt-header">Order Receipt</div>
+      <div class="receipt-header-line"></div>
+      <div class="receipt-items" id="receiptItems"></div>
+      <div class="receipt-delivery" id="receiptDelivery"></div>
+      <div class="receipt-total" id="receiptTotal"></div>
+    </div>
+
+    <div class="confirm-actions">
+      <button type="button" class="confirm-print-btn" onclick="printReceipt()" data-i18n="confirm.print">🖨 Print Receipt</button>
+      <button type="button" class="confirm-continue-btn" onclick="closeConfirmation()" data-i18n="confirm.continue">Continue Shopping</button>
+    </div>
   </div>
 </div>
 
@@ -755,7 +743,7 @@
     </div>
   </div>
   <div class="footer-map">
-    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3219.952904160146!2d5.4342225!3d36.1920272!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12f3150071ec8105%3A0xa152136daa6b0cc7!2sLorenzo%20Magasin!5e0!3m2!1sfr!2sdz!4v1780525702816!5m2!1sfr!2sdz" width="100%" height="250" class="footer-map-iframe" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Lorenzo Magasin Store Location" data-i18n-title="footer.mapTitle"></iframe>
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3219.952904160146!2d5.4342225!3d36.1920272!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12f3150071ec8105%3A0xa152136daa6b0cc7!2sLorenzo%20Magasin!5e0!3m2!1sfr!2sdz!4v1780525702816!5m2!1sfr!2sdz" width="100%" height="250" class="footer-map-iframe" allowfullscreen="" loading="lazy" title="Lorenzo Magasin Store Location" data-i18n-title="footer.mapTitle"></iframe>
   </div>
   <div class="footer-bar">
     <span data-i18n="footer.copyright">&copy; 2026 LORENZO. All rights reserved.</span>
