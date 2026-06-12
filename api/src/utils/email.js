@@ -6,6 +6,8 @@ function createTransporter() {
   const user = process.env.SMTP_USER;
   const pass = process.env.SMTP_PASS;
 
+  console.log(`[SMTP] Creating transporter: host=${host}, port=${port}, user=${user}`);
+
   if (!host || !user || !pass) {
     console.warn('SMTP not configured. Set SMTP_HOST, SMTP_USER, SMTP_PASS in .env to send emails.');
     return null;
@@ -15,7 +17,10 @@ function createTransporter() {
     host,
     port,
     secure: port === 465,
-    auth: { user, pass }
+    auth: { user, pass },
+    connectionTimeout: 10000,
+    greetingTimeout: 10000,
+    socketTimeout: 15000
   });
 }
 
@@ -77,10 +82,12 @@ async function sendOTP(email, otp) {
         </div>
       `
     });
-    return { sent: true };
+    console.log(`[EMAIL] OTP sent successfully to ${email}`);
+    return { sent: true, otp };
   } catch (err) {
-    console.error('Failed to send OTP email:', err);
-    return { sent: false, error: err.message };
+    console.error(`[EMAIL] Failed to send OTP to ${email}:`, err.message);
+    console.log(`[EMAIL FALLBACK] OTP for ${email}: ${otp}`);
+    return { sent: false, otp, error: err.message };
   }
 }
 

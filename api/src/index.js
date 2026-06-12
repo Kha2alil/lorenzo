@@ -144,6 +144,9 @@ app.get('/admin/*', (req, res) => {
 
 app.use(errorHandler);
 
+const maskedUrl = process.env.SUPABASE_URL ? process.env.SUPABASE_URL.replace(/\/\/.*@/, '//***@') : 'NOT SET';
+console.log(`[SUPABASE] URL: ${maskedUrl}, Key set: ${!!process.env.SUPABASE_SERVICE_KEY}`);
+
 app.listen(PORT, () => {
   console.log(`LORENZO API running on http://localhost:${PORT}`);
 });
