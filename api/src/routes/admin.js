@@ -188,6 +188,21 @@ router.post('/reset-password', async (req, res, next) => {
   } catch (err) { next(err); }
 });
 
+// ───── Health check (public) ─────
+router.get('/health', async (req, res) => {
+  try {
+    const { data, error } = await supabase.from('admin_users').select('id').limit(1);
+    if (error) {
+      console.error('[HEALTH] Supabase error:', error);
+      return res.status(503).json({ status: 'error', message: error.message, supabase_url: process.env.SUPABASE_URL ? process.env.SUPABASE_URL.replace(/\/\/.*@/, '//***@') : null });
+    }
+    res.json({ status: 'ok', supabase_url: process.env.SUPABASE_URL ? process.env.SUPABASE_URL.replace(/\/\/.*@/, '//***@') : null });
+  } catch (err) {
+    console.error('[HEALTH] Exception:', err);
+    res.status(503).json({ status: 'error', message: err.message });
+  }
+});
+
 // ───── Protected routes ─────
 router.use(requireAuth);
 
@@ -1273,21 +1288,6 @@ router.delete('/products/:id/promotion', audit('delete', 'promotion', (req) => r
     if (error) throw error;
     res.json({ success: true });
   } catch (err) { next(err); }
-});
-
-// ───── Health check ─────
-router.get('/health', async (req, res) => {
-  try {
-    const { data, error } = await supabase.from('admin_users').select('id').limit(1);
-    if (error) {
-      console.error('[HEALTH] Supabase error:', error);
-      return res.status(503).json({ status: 'error', message: error.message, supabase_url: process.env.SUPABASE_URL ? process.env.SUPABASE_URL.replace(/\/\/.*@/, '//***@') : null });
-    }
-    res.json({ status: 'ok', supabase_url: process.env.SUPABASE_URL ? process.env.SUPABASE_URL.replace(/\/\/.*@/, '//***@') : null });
-  } catch (err) {
-    console.error('[HEALTH] Exception:', err);
-    res.status(503).json({ status: 'error', message: err.message });
-  }
 });
 
 module.exports = router;

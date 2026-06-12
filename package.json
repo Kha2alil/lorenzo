@@ -1,0 +1,8 @@
+{
+  "name": "lorenzo",
+  "private": true,
+  "scripts": {
+    "build": "cd api && npm install",
+    "start": "node api/src/index.js"
+  }
+}
