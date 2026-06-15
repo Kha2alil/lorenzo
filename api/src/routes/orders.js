@@ -99,12 +99,16 @@ router.post('/', ordersPostLimiter, async (req, res, next) => {
     // 2. Server-side price validation — look up real prices from DB
     const productSlugs = items.map(i => i.slug).filter(Boolean);
     let productPrices = {};
+    let activeSlugs = {};
     if (productSlugs.length > 0) {
       const { data: dbProducts } = await supabase
         .from('products')
-        .select('slug, price_dzd')
+        .select('slug, price_dzd, is_active')
         .in('slug', productSlugs);
-      (dbProducts || []).forEach(p => { productPrices[p.slug] = p.price_dzd; });
+      (dbProducts || []).forEach(p => {
+        productPrices[p.slug] = p.price_dzd;
+        activeSlugs[p.slug] = p.is_active;
+      });
     }
 
     let subtotal = 0;
@@ -112,6 +116,9 @@ router.post('/', ordersPostLimiter, async (req, res, next) => {
       const dbPrice = productPrices[item.slug];
       if (!dbPrice) {
         return res.status(400).json({ error: 'Unknown product: ' + item.slug });
+      }
+      if (activeSlugs[item.slug] === false) {
+        return res.status(400).json({ error: item.slug + ' is not available for purchase' });
       }
       const qty = item.qty;
       if (typeof qty !== 'number' || qty < 1 || !Number.isInteger(qty)) {

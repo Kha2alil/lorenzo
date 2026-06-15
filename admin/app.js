@@ -7,6 +7,15 @@ function getToken() { return localStorage.getItem(TOKEN_KEY); }
 function setToken(t) { localStorage.setItem(TOKEN_KEY, t); }
 function clearToken() { localStorage.removeItem(TOKEN_KEY); }
 
+function showError(msg) {
+  const el = document.getElementById('toast-error');
+  if (!el) return;
+  el.textContent = msg;
+  el.style.display = 'block';
+  clearTimeout(el._hide);
+  el._hide = setTimeout(() => el.style.display = 'none', 5000);
+}
+
 async function api(path, opts = {}) {
   const token = getToken();
   const headers = { 'Content-Type': 'application/json' };
@@ -446,11 +455,11 @@ async function deleteCategory(slug) {
     });
     if (!res.ok) {
       const err = await res.json();
-      return alert(err.error || 'Failed to delete category');
+      return showError(err.error || 'Failed to delete category');
     }
     loadCategories();
     populateCategoryDropdown();
-  } catch (e) { alert(e.message); }
+  } catch (e) { showError(e.message); }
 }
 
 document.getElementById('cat-name').addEventListener('input', function () {
@@ -512,7 +521,7 @@ async function deleteBadge(id, name) {
   try {
     await api('/badges/' + id, { method: 'DELETE' });
     loadBadges();
-  } catch (err) { alert(err.message); }
+  } catch (err) { showError(err.message); }
 }
 
 document.getElementById('badge-form').addEventListener('submit', async e => {
@@ -596,6 +605,7 @@ async function editProduct(id) {
   const sizes = (product.sizes || []);
   document.getElementById('pf-sizes').value = Array.isArray(sizes) ? sizes.join(', ') : sizes;
   document.getElementById('pf-description').value = product.description || '';
+  document.getElementById('pf-active').checked = product.is_active !== false;
   document.getElementById('product-form-title').textContent = 'Edit Product';
   document.getElementById('product-form-submit').textContent = 'Update';
   document.getElementById('product-form-container').classList.remove('hidden');
@@ -617,7 +627,7 @@ async function deleteProduct(id) {
   try {
     await api('/products/' + id, { method: 'DELETE' });
     await loadProducts();
-  } catch (err) { alert(err.message); }
+  } catch (err) { showError(err.message); }
 }
 
 document.getElementById('pf-name').addEventListener('input', function () {
@@ -676,6 +686,7 @@ document.getElementById('product-form').addEventListener('submit', async e => {
   fd.append('sizes', JSON.stringify(sizesArr));
   const desc = document.getElementById('pf-description').value.trim();
   if (desc) fd.append('description', desc);
+  fd.append('is_active', document.getElementById('pf-active').checked ? 'true' : 'false');
   const unavailSizes = [];
   document.querySelectorAll('.size-toggle.unavailable').forEach(b => unavailSizes.push(b.dataset.size));
   if (unavailSizes.length > 0) fd.append('unavailable_sizes', JSON.stringify(unavailSizes));
@@ -720,7 +731,7 @@ document.getElementById('product-form').addEventListener('submit', async e => {
     }
     document.getElementById('product-form-container').classList.add('hidden');
     await loadProducts();
-  } catch (err) { alert(err.message); }
+  } catch (err) { showError(err.message); }
 });
 
 // ───── Products search ─────
@@ -772,7 +783,7 @@ function addColorRow(name, hex, id) {
     if (cid && editingProductId) {
       try {
         await api('/products/' + editingProductId + '/colors/' + cid, { method: 'DELETE' });
-      } catch (err) { alert(err.message); return; }
+      } catch (err) { showError(err.message); return; }
     }
     row.remove();
     populateImageColorSelects();
@@ -800,7 +811,7 @@ document.getElementById('addColorBtn').addEventListener('click', async () => {
       });
       addColorRow(color.color_name, color.color_hex, color.id);
       populateImageColorSelects();
-    } catch (err) { alert(err.message); }
+    } catch (err) { showError(err.message); }
   } else {
     addColorRow('New Color', '#C9A84C');
     populateImageColorSelects();
@@ -891,7 +902,7 @@ document.getElementById('removePromoBtn').addEventListener('click', async functi
     document.getElementById('pf-promo-end').value = '';
     document.getElementById('pf-promo-active').checked = true;
     this.style.display = 'none';
-  } catch (err) { alert('Failed to remove promotion: ' + err.message); }
+  } catch (err) { showError('Failed to remove promotion: ' + err.message); }
 });
 
 // ───── Orders ─────
@@ -976,7 +987,7 @@ async function deleteOrder(id) {
     await api('/orders/' + id, { method: 'DELETE' });
     closeDrawer();
     await loadOrders();
-  } catch (err) { alert(err.message); }
+  } catch (err) { showError(err.message); }
 }
 
 // ───── Drawer ─────
@@ -1063,7 +1074,7 @@ async function showOrderDetail(id) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById('page-order-detail').classList.add('active');
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  } catch (err) { alert('Failed to load order: ' + err.message); }
+  } catch (err) { showError('Failed to load order: ' + err.message); }
 }
 
 document.getElementById('drawer-overlay').addEventListener('click', closeDrawer);
@@ -1077,7 +1088,7 @@ document.getElementById('drawer-status').addEventListener('change', async e => {
       body: JSON.stringify({ status })
     });
     await loadOrders();
-  } catch (err) { alert(err.message); }
+  } catch (err) { showError(err.message); }
 });
 
 document.getElementById('odetail-status').addEventListener('change', async e => {
@@ -1088,7 +1099,7 @@ document.getElementById('odetail-status').addEventListener('change', async e => 
       method: 'PATCH',
       body: JSON.stringify({ status })
     });
-  } catch (err) { alert(err.message); }
+  } catch (err) { showError(err.message); }
 });
 
 document.getElementById('odetail-delete-btn').addEventListener('click', async () => {
@@ -1098,7 +1109,7 @@ document.getElementById('odetail-delete-btn').addEventListener('click', async ()
   try {
     await api('/orders/' + id, { method: 'DELETE' });
     showOrdersPage();
-  } catch (err) { alert(err.message); }
+  } catch (err) { showError(err.message); }
 });
 
 // ───── Top Products ─────
@@ -1165,7 +1176,7 @@ async function deleteContact(id) {
   try {
     await api('/contact/' + id, { method: 'DELETE' });
     await loadContacts();
-  } catch (err) { alert(err.message); }
+  } catch (err) { showError(err.message); }
 }
 
 // ───── Audit Log ─────
@@ -1183,7 +1194,7 @@ async function clearAuditLog() {
     if (!res.ok) { const d = await res.json().catch(() => ({})); throw new Error(d.error || 'Failed'); }
     _auditPage = 1;
     loadAuditLogs();
-  } catch (err) { alert(err.message); }
+  } catch (err) { showError(err.message); }
 }
 
 async function loadAuditLogs() {
@@ -1609,6 +1620,18 @@ function showNewOrderToast(count) {
       showScreen('reset-screen');
       document.getElementById('reset-error').textContent = '';
       document.getElementById('reset-success').textContent = '';
+    });
+
+    document.addEventListener('click', e => {
+      const btn = e.target.closest('.pwd-toggle');
+      if (!btn) return;
+      const input = document.getElementById(btn.dataset.target);
+      if (!input) return;
+      const isPassword = input.type === 'password';
+      input.type = isPassword ? 'text' : 'password';
+      btn.innerHTML = isPassword
+        ? '<svg class="eye-icon" viewBox="0 0 24 24" width="18" height="18"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" fill="currentColor"/></svg>'
+        : '<svg class="eye-icon" viewBox="0 0 24 24" width="18" height="18"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3zM3.05 3.05a1 1 0 0 1 1.41-1.41l1.62 1.62A10.5 10.5 0 0 1 12 4.5c5 0 9.27 3.11 11 7.5a11.2 11.2 0 0 1-3.5 4.94l2.45 2.45a1 1 0 1 1-1.41 1.41L3.05 3.05zM8.8 8.8A4 4 0 0 0 15.2 15.2l-1.2-1.2a2.5 2.5 0 0 1-3.2-3.2L8.8 8.8z" fill="currentColor"/></svg>';
     });
   }
 })();

@@ -4,7 +4,7 @@ ALTER TABLE products ADD COLUMN IF NOT EXISTS unavailable_sizes TEXT[] DEFAULT '
 -- Create product_promotions table
 CREATE TABLE IF NOT EXISTS product_promotions (
   id BIGSERIAL PRIMARY KEY,
-  product_id UUID NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+  product_id BIGINT NOT NULL REFERENCES products(id) ON DELETE CASCADE,
   discount_percent INT NOT NULL CHECK (discount_percent > 0 AND discount_percent <= 100),
   start_date TIMESTAMPTZ,
   end_date TIMESTAMPTZ,

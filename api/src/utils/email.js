@@ -6,8 +6,6 @@ function createTransporter() {
   const user = process.env.SMTP_USER;
   const pass = process.env.SMTP_PASS;
 
-  console.log(`[SMTP] Creating transporter: host=${host}, port=${port}, user=${user}`);
-
   if (!host || !user || !pass) {
     console.warn('SMTP not configured. Set SMTP_HOST, SMTP_USER, SMTP_PASS in .env to send emails.');
     return null;

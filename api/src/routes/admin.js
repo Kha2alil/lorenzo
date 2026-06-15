@@ -387,8 +387,9 @@ router.get('/orders/search', async (req, res, next) => {
 
     let query = supabase.from('orders').select('*, customers(full_name, phone)');
 
+    let cutoff;
     if (days > 0) {
-      const cutoff = new Date();
+      cutoff = new Date();
       cutoff.setDate(cutoff.getDate() - days);
       query = query.gte('placed_at', cutoff.toISOString());
     }
@@ -403,20 +404,7 @@ router.get('/orders/search', async (req, res, next) => {
 
       const orClause = `order_number.ilike.%${q}%${customerIds.length > 0 ? `,customer_id.in.(${customerIds.join(',')})` : ''}`;
 
-      if (days > 0) {
-        const cutoff = new Date();
-        cutoff.setDate(cutoff.getDate() - days);
-        query = supabase
-          .from('orders')
-          .select('*, customers(full_name, phone)')
-          .or(orClause)
-          .gte('placed_at', cutoff.toISOString());
-      } else {
-        query = supabase
-          .from('orders')
-          .select('*, customers(full_name, phone)')
-          .or(orClause);
-      }
+      query = query.or(orClause);
     }
 
     const { data, error } = await query.order('placed_at', { ascending: false });
@@ -497,7 +485,7 @@ router.patch('/orders/:id/status', audit('update', 'order-status', (req) => req.
 
 router.post('/products', upload.array('images', 5), audit('create', 'product', (req, res, body) => body?.id), async (req, res, next) => {
   try {
-    const { name, slug, category, price_dzd, description, fabric, sizes, badge, unavailable_sizes } = req.body;
+    const { name, slug, category, price_dzd, description, fabric, sizes, badge, is_active, unavailable_sizes } = req.body;
     const files = req.files || [];
 
     if (!name || !slug || !category || !price_dzd) {
@@ -562,6 +550,7 @@ router.post('/products', upload.array('images', 5), audit('create', 'product', (
         fabric: cleanFabric,
         sizes: sizesArr,
         badge: badge || null,
+        is_active: is_active !== undefined ? is_active : true,
         unavailable_sizes: unavailArr
       })
       .select('id, slug')

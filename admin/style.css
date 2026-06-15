@@ -620,6 +620,10 @@ body {
 }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .field { margin-bottom: 16px; }
+.password-input-wrapper { display: flex; align-items: center; gap: 4px; }
+.password-input-wrapper input { flex: 1; }
+.pwd-toggle { background: none; border: none; cursor: pointer; padding: 4px 6px; color: var(--warm-gray); display: flex; align-items: center; }
+.pwd-toggle:hover { color: var(--text); }
 .field label {
   display: block;
   font-size: 9px;
