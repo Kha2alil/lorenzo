@@ -68,33 +68,22 @@ router.post('/', ordersPostLimiter, async (req, res, next) => {
       return res.status(400).json({ error: 'At least one item is required' });
     }
 
-    // 1. Insert or find customer
-    let customerId;
-    const { data: existing } = await supabase
+    // 1. Create customer record
+    const { data: newCustomer, error: custErr } = await supabase
       .from('customers')
+      .insert({
+        full_name: cleanName,
+        phone: cleanPhone,
+        email: cleanEmail || null,
+        wilaya_code: delivery.wilaya_code || null,
+        commune: cleanCommune,
+        address: cleanAddress
+      })
       .select('id')
-      .eq('phone', cleanPhone)
-      .maybeSingle();
+      .single();
 
-    if (existing) {
-      customerId = existing.id;
-    } else {
-      const { data: newCustomer, error: custErr } = await supabase
-        .from('customers')
-        .insert({
-          full_name: cleanName,
-          phone: cleanPhone,
-          email: cleanEmail || null,
-          wilaya_code: delivery.wilaya_code || null,
-          commune: cleanCommune,
-          address: cleanAddress
-        })
-        .select('id')
-        .single();
-
-      if (custErr) throw custErr;
-      customerId = newCustomer.id;
-    }
+    if (custErr) throw custErr;
+    const customerId = newCustomer.id;
 
     // 2. Server-side price validation — look up real prices from DB
     const productSlugs = items.map(i => i.slug).filter(Boolean);
